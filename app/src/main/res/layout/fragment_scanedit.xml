@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_map"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll_actions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="parent"
+                android:padding="8dp"
+                android:background="?attr/colorSecondaryContainer"
+                >
+
+                <TextView
+                    android:id="@+id/tv_gipa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="GIPA (6127)"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="GPS (48.8966, 2.2601)"
+                    />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gipa"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:gravity="center"
+                    tools:text="HEROLD - MAIRIE DE COURBEVOIE - MARCHE CHARRAS"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/cl_header"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Type d'arrêt" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_type"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/type_potelet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Potelet" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/type_abribus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Abribus" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/type_provisoire"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Provisoire" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?android:attr/listDivider"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_type"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_biv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/div_type"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Type de BIV" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_biv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_biv"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_biv_darc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="DARC" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_biv_3g"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3G" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_biv_hns"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="HNS" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_biv"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?android:attr/listDivider"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_biv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_zone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/div_biv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Zone tarifaire" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_zone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_zone"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_zone"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_zone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_accessibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/div_zone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Accessibilité" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_accessibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_accessibility"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_accessibility_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Non" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_accessibility_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Oui" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_accessibility"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_accessibility"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_sonorisation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/div_accessibility"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Sonorisation" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_sonorisation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sonorisation"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_sonorisation_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Non" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_sonorisation_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Oui" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_sonorisation"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_sonorisation"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_chargeur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/div_sonorisation"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Chargeur USB" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_chargeur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_chargeur"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_chargeur_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Non" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_chargeur_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Oui" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_chargeur"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_chargeur"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_complements"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/div_chargeur"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Complements" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_complements"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_comments"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start|top"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:lines="3"
+                            tools:text="HEROLD - MAIRIE DE COURBEVOIE - MARCHE CHARRAS"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <LinearLayout
+        android:id="@+id/ll_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Précédent"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ok"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Valider"
+            />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

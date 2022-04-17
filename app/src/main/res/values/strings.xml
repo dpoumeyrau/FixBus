@@ -1,3 +1,47 @@
 <resources>
     <string name="app_name">FixBus</string>
+
+    <string name="menu_qrscan_short">Scan</string>
+    <string name="menu_search_short">Cherche</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Clés des préférences -->
+    <string name="prefs_launchescount_key" translatable="false">prefs_launchescount_key</string>
+    <string name="prefs_firebase_cloudmessaging_token_key" translatable="false">prefs_firebase_cloudmessaging_token_key</string>
+    <string name="prefs_opendatalocation_key" translatable="false">prefs_opendatalocation_key</string>
+    <string name="prefs_isdbrefinitialized_key" translatable="false">prefs_isdbrefinitialized_key</string>
+
+    <!-- Autres clés -->
+    <string name="fragment_result_key" translatable="false">fragment_result_key</string>
+    <string name="currentFragmentEnum_key" translatable="false">currentFragmentEnum_key</string>
+    <string name="modalBottomSheetEnum_key" translatable="false">modalBottomSheetEnum_key</string>
+    <string name="firebase_realtimedatabase_opendatalocation_key" translatable="false">opendatalocation</string>
+
+    <!-- ScanFragment -->
+    <string name="scanfragment_permission_dialogbox_title">Accès refusé</string>
+    <string name="scanfragment_permission_dialogbox_message">L\'accès à la caméra a été refusé à l\'application.\nLe lecteur de QRCode ne peut être activé.</string>
+    <string name="scanfragment_permission_dialogbox_action">J\'ai compris</string>
+    <string name="scanfragment_permission_rationale_dialogbox_title">Permission requise</string>
+    <string name="scanfragment_permission_rationale_dialogbox_message">L\'accès à la caméra est nécessaire pour la lecture des QRCodes.\nPour utiliser cette fonctionnalité, veuillez donner cet accès à l\'application dans l\'écran suivant.</string>
+    <string name="scanfragment_permission_rationale_dialogbox_action">D\'accord</string>
+    <string name="scanfragment_gipasearchnoresult">Aucun résultat trouvé pour l\'arrêt $%s"</string>
+    <string name="scanfragment_gipasearcherror">Une erreur est survenue en tentant de récupérer le détail de l\'arrêt $%s"</string>
+    <string name="scanfragment_gipasearchnointernet">Pas de connexion internet pour récupérer le détail de l\'arrêt $%s"</string>
+    <string name="scanfragment_gipasearchtimeout">Délai d\'attente dépassé pour récupérer le détail de l\'arrêt $%s"</string>
+
+    <!-- ScanDetailFragment -->
+    <string name="scandetailfragment_permission_dialogbox_title">Accès refusé</string>
+    <string name="scandetailfragment_permission_dialogbox_message">L\'accès à la localisation a été refusé à l\'application.\nVous devrez donc positionner manuellement le point d\'arrêt sur la carte.</string>
+    <string name="scandetailfragment_permission_dialogbox_action">J\'ai compris</string>
+    <string name="scandetailfragment_permission_rationale_dialogbox_title">Permission requise</string>
+    <string name="scandetailfragment_permission_rationale_dialogbox_message">L\'accès à la localisation est nécessaire pour vous positionner sur la carte.\nPour ne pas avoir à vous positionner manuellement, veuillez donner cet accès à l\'application dans l\'écran suivant.</string>
+    <string name="scandetailfragment_permission_rationale_dialogbox_action">D\'accord</string>
+    <string name="scandetailfragment_stopplacename">%1$d | %2$s</string>
+    <string name="scandetailfragment_stopplacename_nogipa">\????</string>
+    <string name="scandetailfragment_stopplacename_noname">(inconnu)</string>
+
+
+    <!-- Layouts -->
+    <string name="layout_scanfragment_target_contentdescription">Viseur de scan</string>
 </resources>

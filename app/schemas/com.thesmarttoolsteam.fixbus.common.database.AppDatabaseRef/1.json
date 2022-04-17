@@ -1,0 +1,146 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "914c4e4621126d541fca31f3d76973e9",
+    "entities": [
+      {
+        "tableName": "arrets-transporteur",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ArTId` INTEGER, `ArTVersion` TEXT, `ArTCreated` TEXT, `ArTChanged` TEXT, `FournisseurId` INTEGER, `FournisseurName` TEXT, `ArTName` TEXT, `ArTXEpsg2154` INTEGER, `ArTYEpsg2154` INTEGER, `ArRId` INTEGER, `ArTType` TEXT, `ArTPrivateCode` TEXT, `ArTFareZone` TEXT, `ArTAccessibility` TEXT, `ArTAudibleSignals` TEXT, `ArTVisualSigns` TEXT, `ArTTown` TEXT, `ArTPostalRegion` INTEGER, PRIMARY KEY(`ArTId`))",
+        "fields": [
+          {
+            "fieldPath": "ArTId",
+            "columnName": "ArTId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTVersion",
+            "columnName": "ArTVersion",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTCreated",
+            "columnName": "ArTCreated",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTChanged",
+            "columnName": "ArTChanged",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "FournisseurId",
+            "columnName": "FournisseurId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "FournisseurName",
+            "columnName": "FournisseurName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTName",
+            "columnName": "ArTName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTXEpsg2154",
+            "columnName": "ArTXEpsg2154",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTYEpsg2154",
+            "columnName": "ArTYEpsg2154",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArRId",
+            "columnName": "ArRId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTType",
+            "columnName": "ArTType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTPrivateCode",
+            "columnName": "ArTPrivateCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTFareZone",
+            "columnName": "ArTFareZone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTAccessibility",
+            "columnName": "ArTAccessibility",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTAudibleSignals",
+            "columnName": "ArTAudibleSignals",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTVisualSigns",
+            "columnName": "ArTVisualSigns",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTTown",
+            "columnName": "ArTTown",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ArTPostalRegion",
+            "columnName": "ArTPostalRegion",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ArTId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_arrets-transporteur_ArTPrivateCode",
+            "unique": false,
+            "columnNames": [
+              "ArTPrivateCode"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_arrets-transporteur_ArTPrivateCode` ON `${TABLE_NAME}` (`ArTPrivateCode`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '914c4e4621126d541fca31f3d76973e9')"
+    ]
+  }
+}

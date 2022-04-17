@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_fixbus"
+    app:startDestination="@id/nav_scan">
+
+    <fragment
+        android:id="@+id/nav_scan"
+        android:name="com.thesmarttoolsteam.fixbus.scan.ScanFragment"
+        android:label="ScanFragment" />
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.thesmarttoolsteam.fixbus.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/nav_scandetail"
+        android:name="com.thesmarttoolsteam.fixbus.scan.ScanDetailFragment"
+        android:label="ScanDetailFragment" />
+    <fragment
+        android:id="@+id/nav_scanedit"
+        android:name="com.thesmarttoolsteam.fixbus.scan.ScanEditFragment"
+        android:label="ScanEditFragment" />
+</navigation>

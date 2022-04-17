@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "571372003620",
+    "firebase_url": "https://fixbus-9d3e9-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fixbus-9d3e9",
+    "storage_bucket": "fixbus-9d3e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571372003620:android:55fd6b1648f19a81ed93b1",
+        "android_client_info": {
+          "package_name": "com.thesmarttoolsteam.fixbus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571372003620-uui91td0a76q3m8qbq8d5d53r82367rn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHRCo6fmgKeSa0DzePZDDjcYEDyRX-8XY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571372003620-uui91td0a76q3m8qbq8d5d53r82367rn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
