@@ -36,7 +36,8 @@
                 android:layout_marginBottom="48dp"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textStyle="bold"
-                tools:text="TextView" />
+                tools:text="TextView"
+                tools:ignore="PrivateResource" />
 
 
             <fragment
@@ -71,7 +72,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_satellite"/>
+                    android:src="@drawable/ic_satellite"
+                    android:contentDescription="@string/scandetailfragment_layout_iv_maptype_contentdescription"
+                    />
             </FrameLayout>
 
 
@@ -84,7 +87,9 @@
                 map:layout_constraintTop_toTopOf="@id/mv_map"
                 map:layout_constraintBottom_toBottomOf="@id/mv_map"
                 android:visibility="invisible"
-                map:srcCompat="@drawable/ic_pin" />
+                map:srcCompat="@drawable/ic_pin"
+                android:contentDescription="@string/scandetailfragment_layout_iv_pin_contentdescription"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,7 +113,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Précédent"
+            android:text="@string/scandetailfragment_layout_btn_cancel_text"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -120,7 +125,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Valider"
+            android:enabled="false"
+            android:text="@string/scandetailfragment_layout_btn_ok_text"
             />
     </LinearLayout>
 

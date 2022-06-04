@@ -10,6 +10,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.thesmarttoolsteam.fixbus.R
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import com.thesmarttoolsteam.fixbus.common.tools.vibrate
 import timber.log.Timber
 
@@ -27,7 +28,7 @@ class GIPAQrCodeAnalyzer(
 	private val context: Context,
 	private val previewViewWidth: Float,
 	private val previewViewHeight: Float,
-	private val onQrcodeReadCallback: (Int)->Unit) : ImageAnalysis.Analyzer {
+	private val onQrcodeReadCallback: (String)->Unit) : ImageAnalysis.Analyzer {
 
 	// Mise à l'échelle de la box dans le composant de visualisation
 	private var scaleX = 1f
@@ -97,14 +98,14 @@ class GIPAQrCodeAnalyzer(
 	 * @return Code GIPA si trouvé ou null sinon
 	 */
 	//----------------------------------------------------------------------------------------------
-	private fun checkQRCodeURL(url: String): Int? {
+	private fun checkQRCodeURL(url: String): String? {
 		Timber.v("In")
 
 		Timber.d("Contrôle de l'url : $url")
 		val qrcodeUrlTemplate = getResString(context, R.string.gradle_qrcodeUrlTemplate)
 			?: "gradle_qrcodeUrlTemplate"
 		val uri = Uri.parse(url)
-		var gipaCode: Int? = null
+		var gipaCode: String? = null
 
 		if ((!url.startsWith(qrcodeUrlTemplate)) || (uri.pathSegments.size != 2)) {
 			Timber.w("Mauvaise structure d'URL")
@@ -112,7 +113,7 @@ class GIPAQrCodeAnalyzer(
 		}
 
 		try {
-			gipaCode = Integer.parseInt(uri.lastPathSegment!!)
+			gipaCode = uri.lastPathSegment!!
 			Timber.d("Code GIPA : $gipaCode")
 		} catch (e: Exception) {
 			Timber.e(e, "Exception : ${e.message}")

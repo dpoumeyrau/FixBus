@@ -44,6 +44,7 @@ class FixBusApp : Application() {
 
 		Timber.d("Activation des couleurs dynamiques Android")
 		DynamicColors.applyToActivitiesIfAvailable(this)
+
 		instance = this
 	}
 

@@ -34,7 +34,7 @@
                 android:layout_width="192dp"
                 android:layout_height="192dp"
                 app:srcCompat="@drawable/ic_scan_target"
-                android:contentDescription="@string/layout_scanfragment_target_contentdescription"
+                android:contentDescription="@string/scanfragment_layout_iv_target_contentdescription"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

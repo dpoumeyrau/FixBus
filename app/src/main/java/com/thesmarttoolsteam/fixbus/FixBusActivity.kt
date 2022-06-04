@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.thesmarttoolsteam.fixbus.common.FragmentEnum
-import com.thesmarttoolsteam.fixbus.common.getResString
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import com.thesmarttoolsteam.fixbus.common.services.AppPreferences
 import com.thesmarttoolsteam.fixbus.databinding.ActivityFixbusBinding
 import timber.log.Timber
@@ -35,7 +35,7 @@ class FixBusActivity : AppCompatActivity() {
 		binding = ActivityFixbusBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
-		viewModel.filler = "" // Pour supprimer le warning "not used"
+		viewModel.userId = "DP747541" // Pour supprimer le warning "not used"
 		setActivityListeners()
 	}
 

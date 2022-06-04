@@ -8,6 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.*
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import timber.log.Timber
 
 //==================================================================================================

@@ -1,4 +1,4 @@
-package com.thesmarttoolsteam.fixbus.common
+package com.thesmarttoolsteam.fixbus.common.tools
 
 import android.content.Context
 import androidx.annotation.*

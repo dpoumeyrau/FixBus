@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.thesmarttoolsteam.fixbus.R
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import timber.log.Timber
 import java.io.Serializable
 
@@ -24,7 +25,7 @@ enum class FragmentEnum {
  * Type des bottomsheets
  */
 //--------------------------------------------------------------------------------------------------
-enum class ModalBottomSheetEnum {}
+enum class ModalBottomSheetEnum
 
 //==================================================================================================
 /**

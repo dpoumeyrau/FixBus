@@ -9,25 +9,29 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.thesmarttoolsteam.fixbus.FixBusActivity
 import com.thesmarttoolsteam.fixbus.FixBusActivityViewModel
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.AppFragment
 import com.thesmarttoolsteam.fixbus.common.AppPermissionManager
-import com.thesmarttoolsteam.fixbus.common.getResString
+import com.thesmarttoolsteam.fixbus.common.database.model.ArretFixBusUi
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import com.thesmarttoolsteam.fixbus.databinding.FragmentScandetailBinding
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ScanDetailFragment : AppFragment() {
@@ -38,6 +42,9 @@ class ScanDetailFragment : AppFragment() {
 	private lateinit var locationRequest: LocationRequest
 	private lateinit var googleMap: GoogleMap
 	private var moveMapOnLocationUpdate = true
+	private lateinit var lastLocation: Location
+	private var manualPositionning = false
+	private var mapDisplayed = false
 
 	//==============================================================================================
 	/**
@@ -59,9 +66,7 @@ class ScanDetailFragment : AppFragment() {
 				Timber.v("Location : $location")
 
 				if (location != null) {
-					Timber.d("Sauvegarde de la position de l'utilisateur")
-					viewModel.stopPlace?.newUserLocationLat = location.latitude
-					viewModel.stopPlace?.newUserLocationLng = location.longitude
+					lastLocation = location
 				}
 
 				if ((location != null) && (moveMapOnLocationUpdate)){
@@ -76,26 +81,26 @@ class ScanDetailFragment : AppFragment() {
 					)
 				}
 
-				if (viewModel.stopPlace?.GPSLatLng != null) {
+				if (viewModel.stopPlace?.idfmData?.getLatLng() != null) {
 					Timber.d("Ajout du marqueur (position courante de l'utilisateur)")
 					googleMap.addMarker(
 						MarkerOptions()
-							.position(viewModel.stopPlace?.GPSLatLng!!)
-							.title(viewModel.stopPlace?.ArTName ?: "Indéterminé")
+							.position(viewModel.stopPlace?.idfmData?.getLatLng()!!)
+							.title(viewModel.stopPlace?.idfmData?.ArTName ?: "Indéterminé")
 					)
 				}
 
-				startLocationUpdates()
+				// Affichage du pin sur la position de l'utilisateur
+				googleMap.isMyLocationEnabled = true
+
+				binding.ivPin.visibility = View.VISIBLE
+				binding.flMaptype.visibility = View.VISIBLE
+
+				// Mise en place des listeners
+				setGoogleMapListeners()
+
+				mapDisplayed = true
 			}
-
-		// Affichage du pin sur la position de l'utilisateur
-		googleMap.isMyLocationEnabled = true
-
-		binding.ivPin.visibility = View.VISIBLE
-		binding.flMaptype.visibility = View.VISIBLE
-
-		// Mise en place des listeners
-		setGoogleMapListeners()
 	}
 
 	//==============================================================================================
@@ -112,6 +117,7 @@ class ScanDetailFragment : AppFragment() {
 			if ((moveMapOnLocationUpdate) && (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE)) {
 				Timber.d("Déplacement de la map par l'utilisateur")
 				moveMapOnLocationUpdate = false
+				manualPositionning = true
 			}
 			Timber.d("${googleMap.cameraPosition.target.latitude} / ${googleMap.cameraPosition.target.longitude}")
 		}
@@ -120,11 +126,12 @@ class ScanDetailFragment : AppFragment() {
 		googleMap.setOnMyLocationButtonClickListener {
 			Timber.d("In")
 			moveMapOnLocationUpdate = true
+			manualPositionning = false
 			false        // On continue le traitement par défaut
 		}
 
 		// Gestion du bouton de choix du type de carte
-		binding.ivMaptype.setOnClickListener { _ ->
+		binding.ivMaptype.setOnClickListener {
 			Timber.v("In")
 
 			if (googleMap.mapType == GoogleMap.MAP_TYPE_NORMAL) {
@@ -159,32 +166,33 @@ class ScanDetailFragment : AppFragment() {
 
 				if (location != null) {
 					Timber.d("Sauvegarde de la position de l'utilisateur")
-					viewModel.stopPlace?.newUserLocationLat = location.latitude
-					viewModel.stopPlace?.newUserLocationLng = location.longitude
-					viewModel.stopPlace?.NewUserLocationAccuracy = location.accuracy
+					lastLocation = location
+					binding.btnOk.isEnabled = true
 				}
 
-				googleMap.apply {
-					if (moveMapOnLocationUpdate) {
-						moveCamera(
-							CameraUpdateFactory.newLatLng(
-								LatLng(
-									location.latitude,
-									location.longitude
+				if (mapDisplayed) {
+					googleMap.apply {
+						if (moveMapOnLocationUpdate) {
+							moveCamera(
+								CameraUpdateFactory.newLatLng(
+									LatLng(
+										location.latitude,
+										location.longitude
+									)
 								)
 							)
+						}
+
+						mapCircle?.remove()
+						mapCircle = addCircle(
+							CircleOptions()
+								.center(LatLng(location.latitude, location.longitude))
+								.radius(location.accuracy.toDouble())
+								.strokeColor(
+									if (location.accuracy < 5) Color.GREEN else Color.RED
+								)
 						)
 					}
-
-					mapCircle?.remove()
-					mapCircle = addCircle(
-						CircleOptions()
-							.center(LatLng(location.latitude, location.longitude))
-							.radius(location.accuracy.toDouble())
-							.strokeColor(
-								if (location.accuracy < 5) Color.GREEN else Color.RED
-							)
-					)
 				}
 			}
 		}
@@ -258,6 +266,8 @@ class ScanDetailFragment : AppFragment() {
 
 		fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 		setupUi()
+
+		startLocationUpdates()
 	}
 
 	//==============================================================================================
@@ -271,12 +281,12 @@ class ScanDetailFragment : AppFragment() {
 		binding.tvStopname.text = getResString(
 			requireContext(),
 			R.string.scandetailfragment_stopplacename,
-			viewModel.stopPlace?.ArTPrivateCode
+			viewModel.stopPlace?.gipaCode
 				?: getResString(
 					requireContext(),
 					R.string.scandetailfragment_stopplacename_nogipa
-				) ?: "?",
-			viewModel.stopPlace?.ArTName
+				) ?: "viewModel.stopPlace?.gipaCode",
+			viewModel.stopPlace?.idfmData?.ArTName
 				?: getResString(
 					requireContext(),
 					R.string.scandetailfragment_stopplacename_noname
@@ -285,8 +295,59 @@ class ScanDetailFragment : AppFragment() {
 
 		binding.btnOk.setOnClickListener {
 			Timber.v("In")
-			viewModel.stopPlace?.newStopPlaceLat = googleMap.cameraPosition.target.latitude
-			viewModel.stopPlace?.newStopPlaceLng = googleMap.cameraPosition.target.longitude
+			if (viewModel.stopPlace?.fixBusData == null) {
+				Timber.d("Création d'un nouveau fixBusData")
+				viewModel.stopPlace?.fixBusData = ArretFixBusUi(
+					userId = viewModel.userId ?: "?",
+					createdDate = SimpleDateFormat("yyyyMMddhhmm", Locale.FRANCE).format(Date()),
+					userPositionLat = lastLocation.latitude,
+					userPositionLng = lastLocation.longitude,
+					userPositionAccuracy = lastLocation.accuracy,
+					mapDisplayed = mapDisplayed,
+					stopGIPA = viewModel.stopPlace?.gipaCode,
+					stopName = viewModel.stopPlace?.idfmData?.ArTName,
+					stopPositionLat = googleMap.cameraPosition.target.latitude,
+					stopPositionLng = googleMap.cameraPosition.target.longitude,
+					stopManualPositionning = manualPositionning,
+					stopType = null,
+					stopBIVType = null,
+					stopFareZone = viewModel.stopPlace?.idfmData?.ArTFareZone,
+					stopAccessibility =
+						when (viewModel.stopPlace?.idfmData?.ArTAccessibility) {
+							"true" -> true
+							"false" -> false
+							else -> null
+						},
+					stopAudibleSignals =
+						when (viewModel.stopPlace?.idfmData?.ArTAudibleSignals) {
+							"true" -> true
+							"false" -> false
+							else -> null
+					},
+					stopVisualSigns =
+						when (viewModel.stopPlace?.idfmData?.ArTVisualSigns) {
+							"true" -> true
+							"false" -> false
+							else -> null
+						},
+					stopUSBCharger = null,
+					stopInterventionNeeded = null,
+					stopComments = null
+				)
+			} else {
+				Timber.d("FixBusData déjà existant")
+				viewModel.stopPlace?.fixBusData = viewModel.stopPlace?.fixBusData?.copy (
+					userId = viewModel.userId ?: "?",
+					createdDate = SimpleDateFormat("yyyyMMddhhmm", Locale.FRANCE).format(Date()),
+					userPositionLat = lastLocation.latitude,
+					userPositionLng = lastLocation.longitude,
+					userPositionAccuracy =  lastLocation.accuracy,
+					stopPositionLat = googleMap.cameraPosition.target.latitude,
+					stopPositionLng = googleMap.cameraPosition.target.longitude,
+					mapDisplayed = mapDisplayed
+				)
+			}
+
 			findNavController().navigate(R.id.nav_scanedit)
 		}
 
@@ -328,7 +389,7 @@ class ScanDetailFragment : AppFragment() {
 	 * Arrêt de la surveillance de la modification de la position courante
 	 */
 	//----------------------------------------------------------------------------------------------
-	fun stopLocationUpdates() {
+	private fun stopLocationUpdates() {
 		Timber.v("In")
 		fusedLocationClient.removeLocationUpdates(locationUpdatesCallback)
 	}
@@ -394,5 +455,4 @@ class ScanDetailFragment : AppFragment() {
 		dialogBox.setCanceledOnTouchOutside(false)
 		dialogBox.show()
 	}
-
 }

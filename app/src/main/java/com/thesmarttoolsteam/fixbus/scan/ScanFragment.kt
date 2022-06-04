@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -14,16 +13,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.thesmarttoolsteam.fixbus.FixBusActivity
 import com.thesmarttoolsteam.fixbus.FixBusActivityViewModel
+import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.AppFragment
 import com.thesmarttoolsteam.fixbus.common.AppPermissionManager
 import com.thesmarttoolsteam.fixbus.common.GIPAQrCodeAnalyzer
-import com.thesmarttoolsteam.fixbus.common.getResString
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import com.thesmarttoolsteam.fixbus.databinding.FragmentScanBinding
-import com.thesmarttoolsteam.fixbus.scan.tools.GIPARepository
-import com.thesmarttoolsteam.fixbus.scan.tools.GIPARepositoryImpl
+import com.thesmarttoolsteam.fixbus.scan.tools.ArretsTransporteurRepository
+import com.thesmarttoolsteam.fixbus.scan.tools.ArretsTransporteurRepositoryRoomImpl
 import com.thesmarttoolsteam.fixbus.scan.ui.StopPlaceUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +37,9 @@ class ScanFragment : AppFragment() {
 	private lateinit var cameraExecutor: ExecutorService
 	private lateinit var gipaQrCodeAnalyzer: GIPAQrCodeAnalyzer
 	private val viewModel: FixBusActivityViewModel by activityViewModels()
+	private val arretsTransporteurRepository: ArretsTransporteurRepository by lazy {
+		ArretsTransporteurRepositoryRoomImpl(FixBusApp.appDatabaseService.arretsTransporteurDao)
+	}
 
 	//==============================================================================================
 	override fun onCreateView(
@@ -266,107 +268,32 @@ class ScanFragment : AppFragment() {
 
 	//==============================================================================================
 	/**
-	 * Recherche du QRCode lu dans le repository
+	 * Code GIPA trouvé : Recherche des propriétés de l'arrêt dans le repository
 	 *
 	 * @param gipaCode Code GIPA identifié
 	 */
 	//----------------------------------------------------------------------------------------------
-	private fun onQrcodeRead(gipaCode: Int) {
+	private fun onQrcodeRead(gipaCode: String) {
 		Timber.v("In")
 
 		stopCamera()
 		binding.pbSearching.visibility = View.VISIBLE
 
 		CoroutineScope(Dispatchers.IO).launch {
-			GIPARepositoryImpl(
-				requireContext(),
-				object: GIPARepository.GIPARepositoryInterfaceCallbacks {
-
-					override fun onGIPAFound(stopPlace: StopPlaceUi) {
-						requireActivity().runOnUiThread {
-							Timber.v("In")
-
-							binding.pbSearching.visibility = View.INVISIBLE
-							viewModel.stopPlace = stopPlace
-							findNavController().navigate(R.id.nav_scandetail)
-						}
-					}
-
-					override fun onGIPANotFound(stopPlace: StopPlaceUi) {
-						requireActivity().runOnUiThread {
-							Timber.v("In")
-
-							binding.pbSearching.visibility = View.INVISIBLE
-							Toast.makeText(
-								requireContext(),
-								getResString(context,
-									R.string.scanfragment_gipasearchnoresult,
-									stopPlace.ArTPrivateCode
-								),
-								Toast.LENGTH_LONG
-							).show()
-							viewModel.stopPlace = stopPlace
-							findNavController().navigate(R.id.nav_scandetail)
-						}
-					}
-
-					override fun onGIPASearchError(stopPlace: StopPlaceUi) {
-						requireActivity().runOnUiThread {
-							Timber.v("In")
-
-							binding.pbSearching.visibility = View.INVISIBLE
-							Toast.makeText(
-								requireContext(),
-								getResString(context,
-									R.string.scanfragment_gipasearchnoresult,
-									stopPlace.ArTPrivateCode
-								),
-								Toast.LENGTH_LONG
-							).show()
-							viewModel.stopPlace = stopPlace
-							findNavController().navigate(R.id.nav_scandetail)
-						}
-					}
-
-					override fun onGIPANoInternetConnection(stopPlace: StopPlaceUi) {
-						requireActivity().runOnUiThread {
-							Timber.v("In")
-
-							binding.pbSearching.visibility = View.INVISIBLE
-							Toast.makeText(
-								requireContext(),
-								getResString(context,
-									R.string.scanfragment_gipasearchnoresult,
-									stopPlace.ArTPrivateCode
-								),
-								Toast.LENGTH_LONG
-							).show()
-							viewModel.stopPlace = stopPlace
-							findNavController().navigate(R.id.nav_scandetail)
-						}
-					}
-
-					override fun onGIPATimeout(stopPlace: StopPlaceUi) {
-						requireActivity().runOnUiThread {
-							Timber.v("In")
-
-							binding.pbSearching.visibility = View.INVISIBLE
-							Toast.makeText(
-								requireContext(),
-								getResString(context,
-									R.string.scanfragment_gipasearchnoresult,
-									stopPlace.ArTPrivateCode
-								),
-								Toast.LENGTH_LONG
-							).show()
-							viewModel.stopPlace = stopPlace
-							findNavController().navigate(R.id.nav_scandetail)
-						}
-					}
-
-				}
-			).getStopPlaceFromGIPA(6127/*99999*/)
-			// TODO : ).getStopPlaceFromGIPA(gipaCode)
+			// TODO : Enlever le code en dur (pour les tests)
+			val gipaCodex = gipaCode
+//			val gipaCodex = "xxxx"
+			val arretTransporteur = arretsTransporteurRepository.getArretsTransporteurByGipa(gipaCodex)
+			viewModel.stopPlace = StopPlaceUi(
+				gipaCode = gipaCodex,
+				idfmData = arretTransporteur,
+				fixBusData = null
+			)
+			requireActivity().runOnUiThread {
+				Timber.v("In")
+				binding.pbSearching.visibility = View.INVISIBLE
+				findNavController().navigate(R.id.nav_scandetail)
+			}
 		}
 	}
 }

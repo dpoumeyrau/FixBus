@@ -4,8 +4,8 @@ import android.content.Context
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.TIMBER_BLANKCHAR
 import com.thesmarttoolsteam.fixbus.common.TIMBER_MAXLENGTH
-import com.thesmarttoolsteam.fixbus.common.getResBoolean
-import com.thesmarttoolsteam.fixbus.common.getResString
+import com.thesmarttoolsteam.fixbus.common.tools.getResBoolean
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import timber.log.Timber
 
 /**

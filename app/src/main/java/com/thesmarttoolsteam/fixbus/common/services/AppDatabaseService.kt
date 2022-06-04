@@ -8,12 +8,11 @@ import com.thesmarttoolsteam.fixbus.common.FIXBUSDB_ASSETS_NAME
 import com.thesmarttoolsteam.fixbus.common.FIXBUSDB_REF_NAME
 import com.thesmarttoolsteam.fixbus.common.database.AppDatabaseRef
 import com.thesmarttoolsteam.fixbus.common.database.model.ArretsTransporteurDao
-import com.thesmarttoolsteam.fixbus.common.getResString
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import kotlin.system.measureTimeMillis
 
 class AppDatabaseService private constructor(private val applicationContext: Context) {
@@ -62,14 +61,8 @@ class AppDatabaseService private constructor(private val applicationContext: Con
         if (isInitialized) {
             Timber.w("Le service est déjà initialisé")
         } else {
-            if (!FixBusApp.appPreferences.isDBRefInitialized) {
-                Timber.d("Création de la base de référence")
-                buildDatabaseRef()
-                FixBusApp.appPreferences.isDBRefInitialized = true
-            } else {
-                Timber.d("Base de référence déjà créée")
-            }
-            isInitialized = true
+            Timber.d("Chargement ou création de la base de référence")
+            loadOrBuildDatabaseRef()
         }
     }
 
@@ -78,39 +71,53 @@ class AppDatabaseService private constructor(private val applicationContext: Con
      * Construction de la base de données
      */
     //----------------------------------------------------------------------------------------------
-    private fun buildDatabaseRef() {
+    private fun loadOrBuildDatabaseRef() {
         Timber.v("In")
 
-        val duration = measureTimeMillis {
-            try {
-                val databaseRef = getResString(
-                    applicationContext,
-                    R.string.gradle_configDatabaseRefName
-                ) ?: FIXBUSDB_REF_NAME
-                Timber.d("Nom de la base à créer : $databaseRef")
+        val databaseRef = getResString(
+            applicationContext,
+            R.string.gradle_configDatabaseRefName
+        ) ?: FIXBUSDB_REF_NAME
+        Timber.d("Nom de la base à charger / créer : $databaseRef")
 
-                val databaseAssets = getResString(
-                    applicationContext,
-                    R.string.gradle_configDatabaseAssetsName
-                ) ?: FIXBUSDB_ASSETS_NAME
-                Timber.d("Nom de la base à copier : $databaseAssets")
-
-                appDatabaseRef = Room
-                    .databaseBuilder(
+        if (!FixBusApp.appPreferences.isDBRefInitialized) {
+            Timber.d("Création de la base de référence")
+            val duration = measureTimeMillis {
+                try {
+                    val databaseAssets = getResString(
                         applicationContext,
-                        AppDatabaseRef::class.java,
-                        databaseRef
-                    )
-                    .createFromAsset(databaseAssets)
-                    .fallbackToDestructiveMigration()
-                    .build()
-            } catch (e: Exception) {
-                Timber.e(e, "Exception : ${e.message}")
-                throw e
-            }
-        }
+                        R.string.gradle_configDatabaseAssetsName
+                    ) ?: FIXBUSDB_ASSETS_NAME
+                    Timber.d("Nom de la base à copier : $databaseAssets")
 
-        Timber.d("Done : $duration ms")
+                    appDatabaseRef = Room
+                        .databaseBuilder(
+                            applicationContext,
+                            AppDatabaseRef::class.java,
+                            databaseRef
+                        )
+                        .createFromAsset(databaseAssets)
+                        .fallbackToDestructiveMigration()
+                        .build()
+                } catch (e: Exception) {
+                    Timber.e(e, "Exception : ${e.message}")
+                    throw e
+                }
+            }
+
+            Timber.d("Done : $duration ms")
+            FixBusApp.appPreferences.isDBRefInitialized = true
+        } else {
+            Timber.d("Ouverture de la base de données existante")
+            appDatabaseRef = Room
+                .databaseBuilder(
+                    applicationContext,
+                    AppDatabaseRef::class.java,
+                    databaseRef
+                )
+                .fallbackToDestructiveMigration()
+                .build()
+        }
 
         arretsTransporteurDao = appDatabaseRef.arretsTransporteurDao()
 

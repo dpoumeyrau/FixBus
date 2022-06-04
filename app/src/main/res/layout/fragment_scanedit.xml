@@ -30,7 +30,7 @@
                 app:layout_constraintEnd_toStartOf="parent"
                 android:padding="8dp"
                 android:background="?attr/colorSecondaryContainer"
-                >
+                tools:ignore="PrivateResource">
 
                 <TextView
                     android:id="@+id/tv_gipa"
@@ -51,65 +51,107 @@
                     />
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_stopname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/tv_gipa"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:gravity="center"
-                    tools:text="HEROLD - MAIRIE DE COURBEVOIE - MARCHE CHARRAS"
-                    />
+                    android:minHeight="48dp"
+                    android:hint="@string/scaneditfragment_layout_et_stopename_hint"
+                    android:textColorHint="@color/design_default_color_error"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gipa"
+                    tools:text="HEROLD - MAIRIE DE COURBEVOIE - MARCHE CHARRAS" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/cl_header"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_header"
+                app:layout_constraintVertical_bias="0.0">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    >
+                    android:padding="8dp">
 
                     <TextView
-                        android:id="@+id/tv_type"
+                        android:id="@+id/tv_template"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/scaneditfragment_layout_tv_template_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Type d'arrêt" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone"
+                        />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_type"
+                        android:id="@+id/cg_template"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_type"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_stoptype"
+                        app:singleSelection="true"
+                        android:visibility="gone"
+                        >
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/c_template"
+                        style="@style/Widget.Material3.Chip.Suggestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:text="@string/scaneditfragment_layout_c_template_text"
+                        android:visibility="gone"
+                        />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        android:id="@+id/tv_stoptype"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/scaneditfragment_layout_tv_stoptype_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_stoptype"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_stoptype"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/type_potelet"
+                            android:id="@+id/c_stoptype_pole"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Potelet" />
+                            android:focusable="true"
+                            android:text="@string/scaneditfragment_layout_c_stoptype_pole_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/type_abribus"
+                            android:id="@+id/c_stoptype_bushelter"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Abribus" />
+                            android:text="@string/scaneditfragment_layout_c_stoptype_bushelter_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/type_provisoire"
+                            android:id="@+id/c_stoptype_temporary"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Provisoire" />
+                            android:text="@string/scaneditfragment_layout_c_stoptype_temporary_text" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -119,105 +161,127 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:background="?android:attr/listDivider"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_type"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_stoptype" />
 
                     <TextView
-                        android:id="@+id/tv_biv"
+                        android:id="@+id/tv_bivtype"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toBottomOf="@id/div_type"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_bivtype_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Type de BIV" />
+                        app:layout_constraintTop_toBottomOf="@id/div_type" />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_biv"
+                        android:id="@+id/cg_bivtype"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_biv"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_bivtype"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_biv_darc"
+                            android:id="@+id/c_bivtype_none"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="DARC" />
+                            android:text="@string/scaneditfragment_layout_c_bivtype_none_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_biv_3g"
+                            android:id="@+id/c_bivtype_darc"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3G" />
+                            android:text="@string/scaneditfragment_layout_c_bivtype_darc_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_biv_hns"
+                            android:id="@+id/c_bivtype_3g"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="HNS" />
+                            android:text="@string/scaneditfragment_layout_c_bivtype_3g_text" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_bivtype_hns"
+                            style="@style/Widget.Material3.Chip.Suggestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scaneditfragment_layout_c_bivtype_hns_text" />
 
                     </com.google.android.material.chip.ChipGroup>
 
                     <View
-                        android:id="@+id/div_biv"
+                        android:id="@+id/div_bivtype"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:background="?android:attr/listDivider"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_biv"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_bivtype" />
 
                     <TextView
-                        android:id="@+id/tv_zone"
+                        android:id="@+id/tv_farezone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toBottomOf="@id/div_biv"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_farezone_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Zone tarifaire" />
+                        app:layout_constraintTop_toBottomOf="@id/div_bivtype" />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_zone"
+                        android:id="@+id/cg_farezone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_zone"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_farezone"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_1"
+                            android:id="@+id/c_farezone_1"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1" />
+                            android:text="@string/scaneditfragment_layout_c_farezone_1_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_2"
+                            android:id="@+id/c_farezone_2"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2" />
+                            android:text="@string/scaneditfragment_layout_c_farezone_2_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_3"
+                            android:id="@+id/c_farezone_3"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3" />
+                            android:text="@string/scaneditfragment_layout_c_farezone_3_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_4"
+                            android:id="@+id/c_farezone_4"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4" />
+                            android:text="@string/scaneditfragment_layout_c_farezone_4_text" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_5"
+                            android:id="@+id/c_farezone_5"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5" />
+                            android:text="@string/scaneditfragment_layout_c_farezone_5_text" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_farezone_unknown"
+                            style="@style/Widget.Material3.Chip.Suggestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scaneditfragment_layout_c_farezone_unknown_text" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -225,41 +289,43 @@
                         android:id="@+id/div_zone"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_zone"
+                        android:background="?android:attr/listDivider"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_farezone" />
 
                     <TextView
                         android:id="@+id/tv_accessibility"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toBottomOf="@id/div_zone"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_accessibility_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Accessibilité" />
+                        app:layout_constraintTop_toBottomOf="@id/div_zone" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/cg_accessibility"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_accessibility"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/c_accessibility_no"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Non" />
+                            android:text="@string/scaneditfragment_layout_c_no" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/c_accessibility_yes"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Oui" />
+                            android:text="@string/scaneditfragment_layout_c_yes" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -267,125 +333,215 @@
                         android:id="@+id/div_accessibility"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_accessibility"
+                        android:background="?android:attr/listDivider"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_accessibility" />
 
                     <TextView
-                        android:id="@+id/tv_sonorisation"
+                        android:id="@+id/tv_audiblesignals"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toBottomOf="@id/div_accessibility"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_audiblesignals_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Sonorisation" />
+                        app:layout_constraintTop_toBottomOf="@id/div_accessibility" />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_sonorisation"
+                        android:id="@+id/cg_audiblesignals"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_sonorisation"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_audiblesignals"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_sonorisation_no"
+                            android:id="@+id/c_audiblesignals_no"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Non" />
+                            android:text="@string/scaneditfragment_layout_c_no" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_sonorisation_yes"
+                            android:id="@+id/c_audiblesignals_yes"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Oui" />
+                            android:text="@string/scaneditfragment_layout_c_yes" />
 
                     </com.google.android.material.chip.ChipGroup>
 
                     <View
-                        android:id="@+id/div_sonorisation"
+                        android:id="@+id/div_audiblesignals"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_sonorisation"
+                        android:background="?android:attr/listDivider"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_audiblesignals" />
 
                     <TextView
-                        android:id="@+id/tv_chargeur"
+                        android:id="@+id/tv_visualsigns"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toBottomOf="@id/div_sonorisation"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_visualsigns_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Chargeur USB" />
+                        app:layout_constraintTop_toBottomOf="@id/div_audiblesignals" />
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/cg_chargeur"
+                        android:id="@+id/cg_visualsigns"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_chargeur"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_visualsigns"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_chargeur_no"
+                            android:id="@+id/c_visualsigns_no"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Non" />
+                            android:text="@string/scaneditfragment_layout_c_no" />
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/c_chargeur_yes"
+                            android:id="@+id/c_visualsigns_yes"
+                            style="@style/Widget.Material3.Chip.Suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Oui" />
+                            android:text="@string/scaneditfragment_layout_c_yes" />
 
                     </com.google.android.material.chip.ChipGroup>
 
                     <View
-                        android:id="@+id/div_chargeur"
+                        android:id="@+id/div_visualsigns"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/cg_chargeur"
+                        android:background="?android:attr/listDivider"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cg_visualsigns" />
 
                     <TextView
-                        android:id="@+id/tv_complements"
+                        android:id="@+id/tv_usbcharger"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_vertical"
-                        app:layout_constraintTop_toBottomOf="@id/div_chargeur"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_usbcharger_text"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="Complements" />
+                        app:layout_constraintTop_toBottomOf="@id/div_visualsigns" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_usbcharger"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_usbcharger"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_usbcharger_no"
+                            style="@style/Widget.Material3.Chip.Suggestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scaneditfragment_layout_c_no" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_usbcharger_yes"
+                            style="@style/Widget.Material3.Chip.Suggestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scaneditfragment_layout_c_yes" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_usbcharger"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?android:attr/listDivider"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_usbcharger" />
+
+                    <TextView
+                        android:id="@+id/tv_interventionneeded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_interventionneeded_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/div_usbcharger" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_interventionneeded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_interventionneeded"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_interventionneeded_no"
+                            style="@style/Widget.Material3.Chip.Suggestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scaneditfragment_layout_c_no" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/c_interventionneeded_yes"
+                            style="@style/Widget.Material3.Chip.Suggestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scaneditfragment_layout_c_yes" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/div_interventionneeded"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="?android:attr/listDivider"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cg_interventionneeded" />
+
+                    <TextView
+                        android:id="@+id/tv_comments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scaneditfragment_layout_tv_comments_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/div_interventionneeded" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_complements"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        >
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_comments">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_comments"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="start|top"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             android:lines="3"
-                            tools:text="HEROLD - MAIRIE DE COURBEVOIE - MARCHE CHARRAS"
-                            />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="HEROLD - MAIRIE DE COURBEVOIE - MARCHE CHARRAS" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -415,7 +571,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Précédent"
+            android:text="@string/scaneditfragment_layout_btn_cancel_text"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -427,7 +583,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Valider"
+            android:text="@string/scaneditfragment_layout_btn_ok_text"
             />
 
     </LinearLayout>

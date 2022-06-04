@@ -25,10 +25,11 @@
     <string name="scanfragment_permission_rationale_dialogbox_title">Permission requise</string>
     <string name="scanfragment_permission_rationale_dialogbox_message">L\'accès à la caméra est nécessaire pour la lecture des QRCodes.\nPour utiliser cette fonctionnalité, veuillez donner cet accès à l\'application dans l\'écran suivant.</string>
     <string name="scanfragment_permission_rationale_dialogbox_action">D\'accord</string>
-    <string name="scanfragment_gipasearchnoresult">Aucun résultat trouvé pour l\'arrêt $%s"</string>
+    <string name="scanfragment_gipasearchnoresult">Aucun résultat trouvé pour l\'arrêt $%d"</string>
     <string name="scanfragment_gipasearcherror">Une erreur est survenue en tentant de récupérer le détail de l\'arrêt $%s"</string>
     <string name="scanfragment_gipasearchnointernet">Pas de connexion internet pour récupérer le détail de l\'arrêt $%s"</string>
     <string name="scanfragment_gipasearchtimeout">Délai d\'attente dépassé pour récupérer le détail de l\'arrêt $%s"</string>
+    <string name="scanfragment_layout_iv_target_contentdescription">Viseur de scan</string>
 
     <!-- ScanDetailFragment -->
     <string name="scandetailfragment_permission_dialogbox_title">Accès refusé</string>
@@ -37,11 +38,53 @@
     <string name="scandetailfragment_permission_rationale_dialogbox_title">Permission requise</string>
     <string name="scandetailfragment_permission_rationale_dialogbox_message">L\'accès à la localisation est nécessaire pour vous positionner sur la carte.\nPour ne pas avoir à vous positionner manuellement, veuillez donner cet accès à l\'application dans l\'écran suivant.</string>
     <string name="scandetailfragment_permission_rationale_dialogbox_action">D\'accord</string>
-    <string name="scandetailfragment_stopplacename">%1$d | %2$s</string>
+    <string name="scandetailfragment_stopplacename">%1$s | %2$s</string>
     <string name="scandetailfragment_stopplacename_nogipa">\????</string>
     <string name="scandetailfragment_stopplacename_noname">(inconnu)</string>
+    <string name="scandetailfragment_layout_btn_cancel_text">Précédent</string>
+    <string name="scandetailfragment_layout_btn_ok_text">Suivant</string>
+    <string name="scandetailfragment_layout_iv_maptype_contentdescription">Changer de type de carte</string>
+    <string name="scandetailfragment_layout_iv_pin_contentdescription">Position de l\'arrêt sur la carte</string>
 
+    <!-- ScanEditFragment -->
+    <string name="scaneditfragment_layout_c_no">Non</string>
+    <string name="scaneditfragment_layout_c_yes">Oui</string>
 
-    <!-- Layouts -->
-    <string name="layout_scanfragment_target_contentdescription">Viseur de scan</string>
+    <string name="scaneditfragment_layout_tv_gipa_text">GIPA : %s</string>
+    <string name="scaneditfragment_layout_tv_gps_text">GPS : (%.5f,%.5f)</string>
+
+    <string name="scaneditfragment_layout_et_stopename_hint">Précisez le nom de l\'arrêt</string>
+
+    <string name="scaneditfragment_layout_tv_template_text">ChipGroup template</string>
+    <string name="scaneditfragment_layout_c_template_text">Chip template</string>
+
+    <string name="scaneditfragment_layout_tv_stoptype_text">Type d\'arrêt</string>
+    <string name="scaneditfragment_layout_c_stoptype_pole_text">Potelet</string>
+    <string name="scaneditfragment_layout_c_stoptype_bushelter_text">Abribus</string>
+    <string name="scaneditfragment_layout_c_stoptype_temporary_text">Provisoire</string>
+
+    <string name="scaneditfragment_layout_tv_bivtype_text">Type de BIV</string>
+    <string name="scaneditfragment_layout_c_bivtype_darc_text">DARC</string>
+    <string name="scaneditfragment_layout_c_bivtype_3g_text">3G</string>
+    <string name="scaneditfragment_layout_c_bivtype_hns_text">HNS</string>
+    <string name="scaneditfragment_layout_c_bivtype_none_text">Aucune</string>
+
+    <string name="scaneditfragment_layout_tv_farezone_text">Zone tarifaire</string>
+    <string name="scaneditfragment_layout_c_farezone_1_text">1</string>
+    <string name="scaneditfragment_layout_c_farezone_2_text">2</string>
+    <string name="scaneditfragment_layout_c_farezone_3_text">3</string>
+    <string name="scaneditfragment_layout_c_farezone_4_text">4</string>
+    <string name="scaneditfragment_layout_c_farezone_5_text">5</string>
+    <string name="scaneditfragment_layout_c_farezone_unknown_text">\?</string>
+
+    <string name="scaneditfragment_layout_tv_accessibility_text">Arrêt globalement accessible ?</string>
+    <string name="scaneditfragment_layout_tv_audiblesignals_text">Présence d’informations sonores ?</string>
+    <string name="scaneditfragment_layout_tv_visualsigns_text">Présence d’informations dynamiques visuelles ?</string>
+    <string name="scaneditfragment_layout_tv_usbcharger_text">Présence de chargeurs USB ?</string>
+    <string name="scaneditfragment_layout_tv_comments_text">Informations complémentaires</string>
+    <string name="scaneditfragment_layout_tv_interventionneeded_text">Intervention nécessaire ?</string>
+
+    <string name="scaneditfragment_layout_btn_cancel_text">Précédent</string>
+    <string name="scaneditfragment_layout_btn_ok_text">Valider</string>
+
 </resources>

@@ -27,6 +27,8 @@ import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.*
 import com.thesmarttoolsteam.fixbus.common.tools.areGooglePlayServicesEnabled
+import com.thesmarttoolsteam.fixbus.common.tools.getResBoolean
+import com.thesmarttoolsteam.fixbus.common.tools.getResInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

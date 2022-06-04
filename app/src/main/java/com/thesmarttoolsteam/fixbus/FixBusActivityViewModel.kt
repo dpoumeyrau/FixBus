@@ -2,7 +2,6 @@ package com.thesmarttoolsteam.fixbus
 
 import androidx.lifecycle.ViewModel
 import com.thesmarttoolsteam.fixbus.scan.ui.StopPlaceUi
-import timber.log.Timber
 
 //==================================================================================================
 /**
@@ -12,6 +11,5 @@ import timber.log.Timber
 class FixBusActivityViewModel : ViewModel() {
 
 	var stopPlace: StopPlaceUi? = null
-	var filler: Any? = null
-
+	var userId: String? = null
 }
