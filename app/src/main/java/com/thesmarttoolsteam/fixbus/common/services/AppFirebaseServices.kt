@@ -223,6 +223,7 @@ class AppFirebaseServices private constructor() {
 				Timber.d("RealtimeDatabase à activer " +
 						"(gradle_configFirebaseRealtimeDatabaseEnabled = true)")
 				appFirebaseRealtimeDatabaseService = AppFirebaseRealtimeDatabaseService()
+				appFirebaseRealtimeDatabaseService?.firebaseRealtimeDatabase?.setPersistenceEnabled(true)
 			} else {
 				Timber.d("Firestore désactivé (gradle_configFirebaseFirestoreEnabled = false)")
 			}

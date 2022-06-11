@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FixBus</string>
+    <string name="app_name">FixBus by Qualivé</string>
 
     <string name="menu_qrscan_short">Scan</string>
     <string name="menu_search_short">Cherche</string>
@@ -86,5 +86,12 @@
 
     <string name="scaneditfragment_layout_btn_cancel_text">Précédent</string>
     <string name="scaneditfragment_layout_btn_ok_text">Valider</string>
+
+    <string name="scaneditfragment_databasesuccesssnackbar_message">Les propriétés du point d\'arrêt on bien été enregistrées</string>
+    <string name="scaneditfragment_databasesuccesssnackbar_action">OK</string>
+    <string name="scaneditfragment_databaseerrordialogbox_title">Oops !</string>
+    <string name="scaneditfragment_databaseerrordialogbox_message">Une erreur est survenue.\n%s\n\nVeuillez reessayer !</string>
+    <string name="scaneditfragment_databaseerrordialogbox_ok">OK</string>
+
 
 </resources>

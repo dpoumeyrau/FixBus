@@ -28,6 +28,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -280,14 +282,14 @@ class ScanFragment : AppFragment() {
 		binding.pbSearching.visibility = View.VISIBLE
 
 		CoroutineScope(Dispatchers.IO).launch {
-			// TODO : Enlever le code en dur (pour les tests)
-			val gipaCodex = gipaCode
-//			val gipaCodex = "xxxx"
-			val arretTransporteur = arretsTransporteurRepository.getArretsTransporteurByGipa(gipaCodex)
+//			val arretTransporteur = arretsTransporteurRepository.getArretsTransporteurByGipa("wwww")
+			val arretTransporteur = arretsTransporteurRepository.getArretsTransporteurByGipa(gipaCode)
+			viewModel.firebaseRealtimeDatabaseChildUUID = UUID.randomUUID().toString()
 			viewModel.stopPlace = StopPlaceUi(
-				gipaCode = gipaCodex,
-				idfmData = arretTransporteur,
-				fixBusData = null
+				creationDate = SimpleDateFormat("yyyyMMddhhmm", Locale.FRANCE).format(Date()),
+				userId = viewModel.userId ?: "?",
+				gipaCode = gipaCode,
+				idfmData = arretTransporteur
 			)
 			requireActivity().runOnUiThread {
 				Timber.v("In")

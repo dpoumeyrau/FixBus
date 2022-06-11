@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.thesmarttoolsteam.fixbus.FixBusActivityViewModel
+import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.AppFragment
 import com.thesmarttoolsteam.fixbus.common.AppPermissionManager
@@ -59,7 +60,7 @@ class ScanDetailFragment : AppFragment() {
 
 		this.googleMap = googleMap
 		fusedLocationClient.getCurrentLocation(
-			LocationRequest.PRIORITY_HIGH_ACCURACY,
+			Priority.PRIORITY_HIGH_ACCURACY,
 			CancellationTokenSource().token
 		)
 			.addOnSuccessListener { location: Location? ->
@@ -215,6 +216,12 @@ class ScanDetailFragment : AppFragment() {
 		Timber.v("In")
 
 		binding = FragmentScandetailBinding.inflate(inflater)
+		fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+		locationRequest = LocationRequest.create().apply {
+			interval = 500L
+			fastestInterval = 250L
+			priority =  Priority.PRIORITY_HIGH_ACCURACY
+		}
 
 		Timber.d("Contrôle des permissions")
 		AppPermissionManager(
@@ -238,6 +245,7 @@ class ScanDetailFragment : AppFragment() {
 				override fun onPermissionGrantedCallback() {
 					Timber.v("In")
 					onMapReady()
+					startLocationUpdates()
 				}
 
 				//==================================================================================
@@ -250,12 +258,6 @@ class ScanDetailFragment : AppFragment() {
 			}
 		)
 
-		locationRequest = LocationRequest.create().apply {
-			interval = 500L
-			fastestInterval = 250L
-			priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-		}
-
 		return binding.root
 	}
 
@@ -264,7 +266,6 @@ class ScanDetailFragment : AppFragment() {
 		Timber.v("In")
 		super.onViewCreated(view, savedInstanceState)
 
-		fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 		setupUi()
 
 		startLocationUpdates()
@@ -297,62 +298,64 @@ class ScanDetailFragment : AppFragment() {
 			Timber.v("In")
 			if (viewModel.stopPlace?.fixBusData == null) {
 				Timber.d("Création d'un nouveau fixBusData")
-				viewModel.stopPlace?.fixBusData = ArretFixBusUi(
-					userId = viewModel.userId ?: "?",
-					createdDate = SimpleDateFormat("yyyyMMddhhmm", Locale.FRANCE).format(Date()),
-					userPositionLat = lastLocation.latitude,
-					userPositionLng = lastLocation.longitude,
-					userPositionAccuracy = lastLocation.accuracy,
-					mapDisplayed = mapDisplayed,
-					stopGIPA = viewModel.stopPlace?.gipaCode,
-					stopName = viewModel.stopPlace?.idfmData?.ArTName,
-					stopPositionLat = googleMap.cameraPosition.target.latitude,
-					stopPositionLng = googleMap.cameraPosition.target.longitude,
-					stopManualPositionning = manualPositionning,
-					stopType = null,
-					stopBIVType = null,
-					stopFareZone = viewModel.stopPlace?.idfmData?.ArTFareZone,
-					stopAccessibility =
+				viewModel.stopPlace = viewModel.stopPlace?.copy(
+					fixBusData = ArretFixBusUi(
+						userPositionLat = lastLocation.latitude,
+						userPositionLng = lastLocation.longitude,
+						userPositionAccuracy = lastLocation.accuracy,
+						mapDisplayed = mapDisplayed,
+						stopGIPA = viewModel.stopPlace?.gipaCode,
+						stopName = viewModel.stopPlace?.idfmData?.ArTName,
+						stopPositionLat = googleMap.cameraPosition.target.latitude,
+						stopPositionLng = googleMap.cameraPosition.target.longitude,
+						stopManualPositionning = manualPositionning,
+						stopType = null,
+						stopBIVType = null,
+						stopFareZone = viewModel.stopPlace?.idfmData?.ArTFareZone,
+						stopAccessibility =
 						when (viewModel.stopPlace?.idfmData?.ArTAccessibility) {
 							"true" -> true
 							"false" -> false
 							else -> null
 						},
-					stopAudibleSignals =
+						stopAudibleSignals =
 						when (viewModel.stopPlace?.idfmData?.ArTAudibleSignals) {
 							"true" -> true
 							"false" -> false
 							else -> null
-					},
-					stopVisualSigns =
+						},
+						stopVisualSigns =
 						when (viewModel.stopPlace?.idfmData?.ArTVisualSigns) {
 							"true" -> true
 							"false" -> false
 							else -> null
 						},
-					stopUSBCharger = null,
-					stopInterventionNeeded = null,
-					stopComments = null
+						stopUSBCharger = null,
+						stopInterventionNeeded = null,
+						stopComments = null
+					)
 				)
 			} else {
-				Timber.d("FixBusData déjà existant")
-				viewModel.stopPlace?.fixBusData = viewModel.stopPlace?.fixBusData?.copy (
-					userId = viewModel.userId ?: "?",
-					createdDate = SimpleDateFormat("yyyyMMddhhmm", Locale.FRANCE).format(Date()),
-					userPositionLat = lastLocation.latitude,
-					userPositionLng = lastLocation.longitude,
-					userPositionAccuracy =  lastLocation.accuracy,
-					stopPositionLat = googleMap.cameraPosition.target.latitude,
-					stopPositionLng = googleMap.cameraPosition.target.longitude,
-					mapDisplayed = mapDisplayed
+				Timber.d("Mise à jour du fixBusData déjà existant")
+				viewModel.stopPlace = viewModel.stopPlace?.copy(
+					fixBusData = viewModel.stopPlace?.fixBusData?.copy (
+						userPositionLat = lastLocation.latitude,
+						userPositionLng = lastLocation.longitude,
+						userPositionAccuracy =  lastLocation.accuracy,
+						stopPositionLat = googleMap.cameraPosition.target.latitude,
+						stopPositionLng = googleMap.cameraPosition.target.longitude,
+						mapDisplayed = mapDisplayed
+					)
 				)
 			}
 
+			stopLocationUpdates()
 			findNavController().navigate(R.id.nav_scanedit)
 		}
 
 		binding.btnCancel.setOnClickListener {
 			Timber.v("In")
+			stopLocationUpdates()
 			findNavController().navigate(R.id.nav_scan)
 		}
 	}

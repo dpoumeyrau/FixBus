@@ -14,7 +14,9 @@ import com.thesmarttoolsteam.fixbus.common.database.model.ArretTransporteurUi
 //--------------------------------------------------------------------------------------------------
 data class StopPlaceUi(
 	val gipaCode: String,
-	val idfmData: ArretTransporteurUi?,
-	var fixBusData: ArretFixBusUi?,
+	val userId: String,
+	val creationDate: String,
+	val idfmData: ArretTransporteurUi? = null,
+	val fixBusData: ArretFixBusUi? = null,
 )
 

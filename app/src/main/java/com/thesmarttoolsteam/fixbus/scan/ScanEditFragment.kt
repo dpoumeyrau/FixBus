@@ -11,7 +11,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DatabaseReference
 import com.thesmarttoolsteam.fixbus.FixBusActivityViewModel
+import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.AppFragment
 import com.thesmarttoolsteam.fixbus.common.database.model.ArretFixBusUi
@@ -74,7 +78,7 @@ class ScanEditFragment : AppFragment() {
 								context,
 								R.string.scaneditfragment_layout_tv_gps_text,
 								viewModel.stopPlace?.fixBusData?.stopPositionLat ?: 0f,
-								viewModel.stopPlace?.fixBusData?.stopPositionLat ?: 0f,
+								viewModel.stopPlace?.fixBusData?.stopPositionLng ?: 0f,
 		) ?: "scaneditfragment_layout_tv_gps_text"
 		binding.etStopname.setText(viewModel.stopPlace?.fixBusData?.stopName)
 
@@ -128,87 +132,129 @@ class ScanEditFragment : AppFragment() {
 		setListeners()
 	}
 
+	//==============================================================================================
+	/**
+	 * Mise en place des listeners pour intercepter toute modification sur une donnée éditable
+	 */
+	//----------------------------------------------------------------------------------------------
 	private fun setListeners() {
 		Timber.v("In")
 
 		binding.cgStoptype.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Choix du type d'arrêt : ${choiceView.text}")
-				viewModel.stopPlace!!.fixBusData!!.stopType = choiceView.text.toString()
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Choix du type d'arrêt : ${choiceView.text}")
+					viewModel.stopPlace!!.fixBusData!!.stopType = choiceView.text.toString()
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgBivtype.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Choix du type de BIV : ${choiceView.text}")
-				viewModel.stopPlace!!.fixBusData!!.stopBIVType = choiceView.text.toString()
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Choix du type de BIV : ${choiceView.text}")
+					viewModel.stopPlace!!.fixBusData!!.stopBIVType = choiceView.text.toString()
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgFarezone.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Choix de la zone : ${choiceView.text}")
-				viewModel.stopPlace!!.fixBusData!!.stopFareZone = choiceView.text.toString()
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Choix de la zone : ${choiceView.text}")
+					viewModel.stopPlace!!.fixBusData!!.stopFareZone = choiceView.text.toString()
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgAccessibility.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Accessibility : ${choiceView.text == "Oui"}")
-				viewModel.stopPlace!!.fixBusData!!.stopAccessibility = (choiceView.text.toString() == "Oui")
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Accessibility : ${choiceView.text == "Oui"}")
+					viewModel.stopPlace!!.fixBusData!!.stopAccessibility =
+						(choiceView.text.toString() == "Oui")
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgAudiblesignals.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Audible Signals : ${choiceView.text == "Oui"}")
-				viewModel.stopPlace!!.fixBusData!!.stopAudibleSignals = (choiceView.text.toString() == "Oui")
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Audible Signals : ${choiceView.text == "Oui"}")
+					viewModel.stopPlace!!.fixBusData!!.stopAudibleSignals =
+						(choiceView.text.toString() == "Oui")
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgVisualsigns.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Visual Signs : ${choiceView.text == "Oui"}")
-				viewModel.stopPlace!!.fixBusData!!.stopVisualSigns = (choiceView.text.toString() == "Oui")
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Visual Signs : ${choiceView.text == "Oui"}")
+					viewModel.stopPlace!!.fixBusData!!.stopVisualSigns =
+						(choiceView.text.toString() == "Oui")
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgUsbcharger.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Visual Signs : ${choiceView.text == "Oui"}")
-				viewModel.stopPlace!!.fixBusData!!.stopUSBCharger = (choiceView.text.toString() == "Oui")
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Visual Signs : ${choiceView.text == "Oui"}")
+					viewModel.stopPlace!!.fixBusData!!.stopUSBCharger =
+						(choiceView.text.toString() == "Oui")
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.cgInterventionneeded.setOnCheckedStateChangeListener { _, chipIds ->
 			Timber.v("In")
-			val choiceView = binding.root.findViewById<Chip>(chipIds[0])
-			if (choiceView != null) {
-				Timber.d("Visual Signs : ${choiceView.text == "Oui"}")
-				viewModel.stopPlace!!.fixBusData!!.stopInterventionNeeded = (choiceView.text.toString() == "Oui")
+			if (chipIds.size > 0) {
+				val choiceView = binding.root.findViewById<Chip>(chipIds[0])
+				if (choiceView != null) {
+					Timber.d("Visual Signs : ${choiceView.text == "Oui"}")
+					viewModel.stopPlace!!.fixBusData!!.stopInterventionNeeded =
+						(choiceView.text.toString() == "Oui")
+				}
+				checkStopPlaceProperties()
+			} else {
+				Timber.d("Pas de changement de sélection")
 			}
-			checkStopPlaceProperties()
 		}
 
 		binding.etStopname.addTextChangedListener {
@@ -226,6 +272,12 @@ class ScanEditFragment : AppFragment() {
 			Timber.v("In")
 			Timber.d("Retour au fragment précédent")
 			findNavController().navigate(R.id.nav_scandetail)
+		}
+
+		binding.btnOk.setOnClickListener {
+			Timber.v("In")
+			Timber.d("Sauvegarde des données")
+			saveStopPlaceProperties()
 		}
 	}
 
@@ -336,7 +388,84 @@ class ScanEditFragment : AppFragment() {
 			chipGroup.forEach {
 				(it as Chip).chipStrokeColor = defaultChipStrokeColor
 			}
-
 		}
+	}
+
+	//==============================================================================================
+	/**
+	 * Sauvegarde des données
+	 * La valeur du noeud est conservée : Les enregistrements s'écrasent tant qu'on n'a pas rescanné
+	 * un code barre
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun saveStopPlaceProperties() {
+		Timber.v("In")
+
+		val realtimeDatabase = FixBusApp.appFirebaseServices.getFirebaseRealtimeDatabase()
+		val reference = realtimeDatabase?.reference
+
+		val completionListener = DatabaseReference.CompletionListener { error, _ ->
+			if (error == null) {
+				Timber.d("Sauvegarde OK")
+				showDatabaseSuccessSnackbar()
+				findNavController().navigate(R.id.nav_scan)
+			} else {
+				Timber.e("Result : ${error.message}")
+				showDatabaseFailureDialogBox(error.message)
+			}
+		}
+
+		reference?.child("collectedData")
+			?.child(viewModel.firebaseRealtimeDatabaseChildUUID!!)
+			?.setValue(viewModel.stopPlace, completionListener)
+	}
+
+	//==============================================================================================
+	/**
+	 * Affichage d'un snackbar sur résultat OK de la sauvegarde
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun showDatabaseSuccessSnackbar() {
+		Timber.v("In")
+
+		Snackbar.make(
+			binding.root,
+			getResString(
+				requireContext(),
+				R.string.scaneditfragment_databasesuccesssnackbar_message
+			) ?: "scaneditfragment_databasesuccesssnackbar_message",
+			Snackbar.LENGTH_LONG
+		)
+			.setAnchorView(binding.vwBottom)
+			.show()
+	}
+
+	//==============================================================================================
+	/**
+	 * Affichage d'un snackbar sur résultat KO de la sauvegarde
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun showDatabaseFailureDialogBox(error: String) {
+		Timber.v("In")
+
+		MaterialAlertDialogBuilder(requireContext())
+			.setTitle(
+				getResString(requireContext(),
+				R.string.scaneditfragment_databaseerrordialogbox_title)
+			)
+			.setMessage(getResString(
+					requireContext(),
+					R.string.scaneditfragment_databaseerrordialogbox_message,
+					error
+			))
+			.setCancelable(false)
+			.setPositiveButton(getResString(
+				requireContext(),
+				R.string.scaneditfragment_databaseerrordialogbox_ok
+			)) { dialog, which ->
+				Timber.v("In")
+				dialog.dismiss()
+			}
+			.show()
 	}
 }

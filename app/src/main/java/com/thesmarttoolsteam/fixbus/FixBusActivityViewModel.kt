@@ -10,6 +10,7 @@ import com.thesmarttoolsteam.fixbus.scan.ui.StopPlaceUi
 //--------------------------------------------------------------------------------------------------
 class FixBusActivityViewModel : ViewModel() {
 
+	var firebaseRealtimeDatabaseChildUUID: String? = null
 	var stopPlace: StopPlaceUi? = null
 	var userId: String? = null
 }

@@ -1,8 +1,6 @@
 package com.thesmarttoolsteam.fixbus.common.database.model
 
 data class ArretFixBusUi (
-	val userId: String,
-	val createdDate: String,
 	var userPositionLat: Double?,
 	var userPositionLng: Double?,
 	var userPositionAccuracy: Float?,
