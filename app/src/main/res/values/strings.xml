@@ -11,6 +11,10 @@
     <string name="prefs_firebase_cloudmessaging_token_key" translatable="false">prefs_firebase_cloudmessaging_token_key</string>
     <string name="prefs_opendatalocation_key" translatable="false">prefs_opendatalocation_key</string>
     <string name="prefs_isdbrefinitialized_key" translatable="false">prefs_isdbrefinitialized_key</string>
+    <string name="prefs_user_personalnumber_key" translatable="false">prefs_user_personalnumber_key</string>
+    <string name="prefs_idfm_storefilepath_key" translatable="false">prefs_idfm_storefilepath_key</string>
+    <string name="prefs_local_storefilepath_key" translatable="false">prefs_local_storefilepath_key</string>
+    <string name="prefs_db_dbfilepath_key" translatable="false">prefs_db_dbfilepath_key</string>
 
     <!-- Autres clés -->
     <string name="fragment_result_key" translatable="false">fragment_result_key</string>
@@ -93,5 +97,19 @@
     <string name="scaneditfragment_databaseerrordialogbox_message">Une erreur est survenue.\n%s\n\nVeuillez reessayer !</string>
     <string name="scaneditfragment_databaseerrordialogbox_ok">OK</string>
 
+    <string name="fixbuxactivity_personalnumber_title">Qui est là ?</string>
+    <string name="fixbuxactivity_personalnumber_message">Pour commencer, indiquez-nous votre matricule</string>
+    <string name="fixbuxactivity_personalnumber_action_ok">OK</string>
+    <string name="fixbuxactivity_personalnumber_action_cancel">Quitter</string>
+    <string name="fixbuxactivity_personalnumber_error">Matricule incorrect</string>
 
+    <string name="scandetailfragment_location_title">Service de localisation</string>
+    <string name="scandetailfragment_location_message">Pour continuer, merci de bien vouloir activer le service de localisation.</string>
+    <string name="scandetailfragment_location_action_ok">C\'est fait !</string>
+    <string name="scandetailfragment_location_action_cancel">Quitter</string>
+
+    <string name="scandetailfragment_connection_title">Service de données</string>
+    <string name="scandetailfragment_connection_message">Pour continuer, merci de bien vouloir activer le service de données (connexion Internet).</string>
+    <string name="scandetailfragment_connection_action_ok">C\'est fait !</string>
+    <string name="scandetailfragment_connection_action_cancel">Quitter</string>
 </resources>

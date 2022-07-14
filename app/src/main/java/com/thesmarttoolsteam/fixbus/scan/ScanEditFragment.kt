@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.thesmarttoolsteam.fixbus.FixBusActivityViewModel
 import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
+import com.thesmarttoolsteam.fixbus.common.APPFIREBASESERVICES_DEFAULT_FIREBASE_REALTIMEDATABASE_SERVICE_UNKNOWN_ERROR
 import com.thesmarttoolsteam.fixbus.common.AppFragment
 import com.thesmarttoolsteam.fixbus.common.database.model.ArretFixBusUi
 import com.thesmarttoolsteam.fixbus.common.tools.getResString
@@ -401,10 +403,13 @@ class ScanEditFragment : AppFragment() {
 	private fun saveStopPlaceProperties() {
 		Timber.v("In")
 
+
 		val realtimeDatabase = FixBusApp.appFirebaseServices.getFirebaseRealtimeDatabase()
 		val reference = realtimeDatabase?.reference
 
 		val completionListener = DatabaseReference.CompletionListener { error, _ ->
+			binding.pbSaving.visibility = View.INVISIBLE
+			enableChildViews(true)
 			if (error == null) {
 				Timber.d("Sauvegarde OK")
 				showDatabaseSuccessSnackbar()
@@ -415,9 +420,35 @@ class ScanEditFragment : AppFragment() {
 			}
 		}
 
-		reference?.child("collectedData")
-			?.child(viewModel.firebaseRealtimeDatabaseChildUUID!!)
-			?.setValue(viewModel.stopPlace, completionListener)
+		try {
+			reference
+				?.child(
+					getResString(
+						requireContext(),
+						R.string.gradle_configFirebaseCollectedDataChildName
+					) ?: "gradle_configFirebaseCollectedDataChildName"
+				)
+				?.child(
+					getResString(
+						requireContext(),
+						R.string.gradle_configFirebaseRealtimeBranch
+					) ?: "gradle_configFirebaseRealtimeBranch"
+				)
+				?.child(viewModel.firebaseRealtimeDatabaseChildUUID!!)
+				?.setValue(viewModel.stopPlace, completionListener)
+		} catch (error: Exception) {
+			Timber.e(error, "Exception : ${error.message}")
+			showDatabaseFailureDialogBox(
+				error.message
+					?: APPFIREBASESERVICES_DEFAULT_FIREBASE_REALTIMEDATABASE_SERVICE_UNKNOWN_ERROR
+			)
+			binding.pbSaving.visibility = View.INVISIBLE
+			enableChildViews(true)
+		}
+
+		binding.pbSaving.visibility = View.VISIBLE
+		enableChildViews(false)
+
 	}
 
 	//==============================================================================================
@@ -459,13 +490,50 @@ class ScanEditFragment : AppFragment() {
 					error
 			))
 			.setCancelable(false)
-			.setPositiveButton(getResString(
-				requireContext(),
-				R.string.scaneditfragment_databaseerrordialogbox_ok
-			)) { dialog, which ->
+			.setPositiveButton(getResString(requireContext(), R.string.scaneditfragment_databaseerrordialogbox_ok)) { dialog, _ ->
 				Timber.v("In")
 				dialog.dismiss()
 			}
 			.show()
+	}
+
+	//==============================================================================================
+	/**
+	 *  Changer le mode de tous les éléments du formulaire (hors bouton "Précédent")
+	 */
+	//==============================================================================================
+	private fun enableChildViews(enable: Boolean) {
+		Timber.v("In")
+
+		binding.cgStoptype.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgStoptype.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgInterventionneeded.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgFarezone.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgAudiblesignals.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgAccessibility.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgBivtype.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgUsbcharger.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.cgVisualsigns.children.iterator().forEach {
+			it.isClickable = enable
+		}
+		binding.etStopname.isEnabled = enable
+		binding.etComments.isEnabled = enable
+		binding.btnOk.isEnabled = enable
 	}
 }

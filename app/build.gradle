@@ -46,9 +46,13 @@ android {
             resValue "bool",    "gradle_configFirebaseAnonymousAuthEnabled", "true"
             resValue "bool",    "gradle_configFirebaseCloudMessagingEnabled", "true"
             resValue "bool",    "gradle_configFirebaseRealtimeDatabaseEnabled", "true"
-            resValue "integer", "gradle_configFirebaseRelatimeDatabaseTimeout", "5000"
+            resValue "integer", "gradle_configFirebaseRealtimeDatabaseTimeout", "5000"
+            resValue "string",  "gradle_configFirebaseSettingsChildName", "settings"
+            resValue "string",  "gradle_configFirebaseRealtimeIDFMStoragePath", "idfmStoragePath"
+            resValue "string",  "gradle_configFirebaseCollectedDataChildName", "collectedData"
+            resValue "string",  "gradle_configFirebaseRealtimeBranch", "release"
+            resValue "bool",    "gradle_configFirebaseStorageEnabled", "true"
 
-            resValue "string",  "gradle_configFirebaseRealtimeDatabaseSettingsKey", "settings"
             resValue "string",  "gradle_qrcodeUrlTemplate", "https://tagiv.ratp.fr/bus/"
 
             resValue "string",  "gradle_configDatabaseAssetsName", "database/fixbus_ref.db"
@@ -71,9 +75,13 @@ android {
             resValue "bool",    "gradle_configFirebaseAnonymousAuthEnabled", "true"
             resValue "bool",    "gradle_configFirebaseCloudMessagingEnabled", "true"
             resValue "bool",    "gradle_configFirebaseRealtimeDatabaseEnabled", "true"
-            resValue "integer", "gradle_configFirebaseRelatimeDatabaseTimeout", "10000"
+            resValue "integer", "gradle_configFirebaseRealtimeDatabaseTimeout", "10000"
+            resValue "string",  "gradle_configFirebaseSettingsChildName", "settings"
+            resValue "string",  "gradle_configFirebaseRealtimeIDFMStoragePath", "idfmStoragePath"
+            resValue "string",  "gradle_configFirebaseCollectedDataChildName", "collectedData"
+            resValue "string",  "gradle_configFirebaseRealtimeBranch", "debug"
+            resValue "bool",    "gradle_configFirebaseStorageEnabled", "true"
 
-            resValue "string",  "gradle_configFirebaseRealtimeDatabaseSettingsKey", "settings"
             resValue "string",  "gradle_qrcodeUrlTemplate", "https://tagiv.ratp.fr/bus/"
 
             // Nom du fichier de chargement de la base de données de référence
@@ -136,7 +144,7 @@ dependencies {
 
     // Google Firebase
     def appcheck_version = '16.0.0'
-    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-perf'
@@ -164,12 +172,12 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$location_version"
 
     // GSon
-    def gson_version = "2.8.9"
-    implementation "com.google.code.gson:gson:$gson_version"
+//    def gson_version = "2.8.9"
+//    implementation "com.google.code.gson:gson:$gson_version"
 
     // CSV (lecture opendata)
-    def csv_version = "1.5"
-    implementation "org.apache.commons:commons-csv:$csv_version"
+//    def csv_version = "1.5"
+//    implementation "org.apache.commons:commons-csv:$csv_version"
 
     // Room
     def room_version = '2.4.2'

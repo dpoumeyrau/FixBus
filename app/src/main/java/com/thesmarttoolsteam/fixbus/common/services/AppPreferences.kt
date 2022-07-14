@@ -23,7 +23,7 @@ object AppPreferences {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var applicationContext: Context
 
-    //----------------------------------------------------------------------------------------------
+    //==============================================================================================
     /**
      * Indique le nombre de fois que l'application a été lancée précédemment
      */
@@ -31,7 +31,8 @@ object AppPreferences {
     var launchesCount: Int
         get() {
             val value = sharedPreferences.getInt(
-                getResString(applicationContext, R.string.prefs_launchescount_key), 0
+                getResString(applicationContext, R.string.prefs_launchescount_key),
+                0
             )
             Timber.i("launchesCount -> $value")
             return value
@@ -44,7 +45,97 @@ object AppPreferences {
             ).apply()
         }
 
+    //==============================================================================================
+    /**
+     * Chemin (Firebase Store) du fichier des données IDFM
+     */
     //----------------------------------------------------------------------------------------------
+    var idfmStoreFilePath: String
+        get() {
+            val value = sharedPreferences.getString(
+                getResString(applicationContext, R.string.prefs_idfm_storefilepath_key ),
+                PREFS_IDFM_STORAGEPATH_DEFAULT
+            ) ?: PREFS_IDFM_STORAGEPATH_DEFAULT
+            Timber.i("idfmStoreFilePath -> $value")
+            return value
+        }
+        set(filepath) {
+            Timber.i("idfmStoreFilePath <- $filepath")
+            sharedPreferences.edit().putString(
+                getResString(applicationContext, R.string.prefs_idfm_storefilepath_key ),
+                filepath
+            ).apply()
+        }
+
+    //==============================================================================================
+    /**
+     * Chemin du dernier fichier IDFM (Firebase Store) récupéré
+     */
+    //----------------------------------------------------------------------------------------------
+    var localStoreFilePath: String
+        get() {
+            val value = sharedPreferences.getString(
+                getResString(applicationContext, R.string.prefs_local_storefilepath_key ),
+                PREFS_IDFM_STORAGEPATH_DEFAULT
+            ) ?: PREFS_IDFM_STORAGEPATH_DEFAULT
+            Timber.i("localStoreFilePath -> $value")
+            return value
+        }
+        set(filepath) {
+            Timber.i("localStoreFilePath <- $filepath")
+            sharedPreferences.edit().putString(
+                getResString(applicationContext, R.string.prefs_local_storefilepath_key ),
+                filepath
+            ).apply()
+        }
+
+    //==============================================================================================
+    /**
+     * Dernier fichier chargé en base
+     */
+    //----------------------------------------------------------------------------------------------
+    var dbStoreFilePath: String
+        get() {
+            val value = sharedPreferences.getString(
+                getResString(applicationContext, R.string.prefs_db_dbfilepath_key ),
+                PREFS_IDFM_STORAGEPATH_DEFAULT
+            ) ?: PREFS_IDFM_STORAGEPATH_DEFAULT
+            Timber.i("prefs_db_dbfilepath_key -> $value")
+            return value
+        }
+        set(filepath) {
+            Timber.i("prefs_db_dbfilepath_key <- $filepath")
+            sharedPreferences.edit().putString(
+                getResString(applicationContext, R.string.prefs_db_dbfilepath_key ),
+                filepath
+            ).apply()
+        }
+
+    //==============================================================================================
+    /**
+     * Matricule de l'utilisateur
+     */
+    //----------------------------------------------------------------------------------------------
+    var userPersonalNumber: String
+        get() {
+            val value = sharedPreferences.getString(
+                getResString(applicationContext, R.string.prefs_user_personalnumber_key),
+                PREFS_USER_PERSONALNUMBER_DEFAULT
+            ) ?: PREFS_USER_PERSONALNUMBER_DEFAULT
+            Timber.i("userPersonalNumber -> $value")
+            return value
+        }
+        set(value) {
+            Timber.i("userPersonalNumber <- $value")
+            sharedPreferences.edit().putString(
+                getResString(
+                    applicationContext,
+                    R.string.prefs_user_personalnumber_key
+                ),
+                value
+            ).apply()
+        }
+    //==============================================================================================
     /**
      * Token de Firebase Cloud Messaging
      */
@@ -69,7 +160,7 @@ object AppPreferences {
             ).apply()
         }
 
-    //----------------------------------------------------------------------------------------------
+    //==============================================================================================
     /**
      * Nom du fichier de chargement des données OpenData IDFM
      */
@@ -94,7 +185,7 @@ object AppPreferences {
             ).apply()
         }
 
-    //----------------------------------------------------------------------------------------------
+    //==============================================================================================
     /**
      * Vérification de l'initialisation de la base de données
      */
@@ -119,7 +210,7 @@ object AppPreferences {
             ).apply()
         }
 
-    //----------------------------------------------------------------------------------------------
+    //==============================================================================================
     /**
      * Initialisation de la classe.
      *
@@ -148,7 +239,7 @@ object AppPreferences {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
+    //==============================================================================================
     /**
      * Création de la clé de chiffrement.
      */

@@ -22,4 +22,19 @@ class ArretsTransporteurRepositoryRoomImpl(
 
 		return result.firstOrNull()
 	}
+
+	//==============================================================================================
+	/**
+	 * Insertion (ou écrasement) d'un arrêt dans la base
+	 */
+	//----------------------------------------------------------------------------------------------
+	override suspend fun addArretTransporteur(arretTransporteurUi: ArretTransporteurUi): Long {
+		Timber.v("In")
+		Timber.d("Ajout de l'arrêt : $arretTransporteurUi")
+
+		val result = arretsTransporteurDao.insertArretTransporteur(arretTransporteurUi)
+		Timber.d("Identifiant (rowid) de la ligne ajoutée : $result")
+
+		return result
+	}
 }

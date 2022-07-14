@@ -81,7 +81,10 @@ class ScanFragment : AppFragment() {
 		if (::binding.isInitialized) {
 			binding.ivTarget.visibility = View.INVISIBLE
 		}
-		cameraExecutor.shutdown()
+
+		if (::cameraExecutor.isInitialized) {
+			cameraExecutor.shutdown()
+		}
 		super.onDestroy()
 	}
 

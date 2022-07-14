@@ -557,6 +557,18 @@
 
             </ScrollView>
 
+            <ProgressBar
+                android:id="@+id/pb_saving"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:indeterminate="true"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

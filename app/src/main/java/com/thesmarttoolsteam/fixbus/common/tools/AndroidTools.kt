@@ -2,6 +2,7 @@ package com.thesmarttoolsteam.fixbus.common.tools
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -102,4 +103,19 @@ fun isNetworkAvailable(context: Context): Boolean {
     }
     Timber.d("Connexion internet KO")
     return false
+}
+
+//==================================================================================================
+/**
+ * Vérifie si la localisation est activée
+ */
+//--------------------------------------------------------------------------------------------------
+fun isLocationAvailable(context: Context): Boolean {
+    Timber.v("In")
+
+    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    val isLocationAvailable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    Timber.d("Location activé : $isLocationAvailable")
+
+    return isLocationAvailable
 }

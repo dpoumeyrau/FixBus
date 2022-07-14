@@ -48,6 +48,7 @@ fun Fragment.sendFragmentEnumToActivity(fragmentEnum: FragmentEnum) {
  * @param modalBottomSheetId BottomSheet à ouvrir
  */
 //--------------------------------------------------------------------------------------------------
+@Suppress("unused")
 fun Fragment.sendModalBottomSheetEnumToActivity(modalBottomSheetId: ModalBottomSheetEnum) {
 	Timber.v("In")
 	Timber.i("bottomSheetId : $modalBottomSheetId")

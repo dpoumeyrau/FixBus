@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/denis/Android/Projets/FixBus/app/src/main/res/drawable/ic_pin.xml" value="0.276" />
+        <entry key="..\:/Users/denis/Android/Projets/FixBus/app/src/main/res/layout/dialog_userpersonalnumber.xml" value="0.1" />
         <entry key="..\:/Users/denis/Android/Projets/FixBus/app/src/main/res/layout/fragment_scan.xml" value="0.1" />
         <entry key="..\:/Users/denis/Android/Projets/FixBus/app/src/main/res/layout/fragment_scandetail.xml" value="0.1" />
         <entry key="..\:/Users/denis/Android/Projets/FixBus/app/src/main/res/layout/fragment_scanedit.xml" value="0.13333333333333333" />

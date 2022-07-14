@@ -23,6 +23,8 @@ import com.google.firebase.perf.metrics.Trace
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.*
@@ -82,6 +84,11 @@ class AppFirebaseServices private constructor() {
 	private var isFirebaseRealtimeDatabaseServiceEnabled: Boolean
 		= APPFIREBASESERVICES_DEFAULT_IS_FIREBASE_REALTIMEDATABASE_SERVICE_ENABLED
 
+	// Nécessité d'actier ou non le service Storage
+	private var isFirebaseStorageServiceEnabled: Boolean
+			= APPFIREBASESERVICES_DEFAULT_IS_FIREBASE_STORAGE_SERVICE_ENABLED
+
+
 	// Instance des services
 	private var appFirebaseAppCheckService: AppFirebaseAppCheckService? = null
 	private var appFirebaseCrashlyticsService: AppFirebaseCrashlyticsService? = null
@@ -92,6 +99,7 @@ class AppFirebaseServices private constructor() {
 	private var appFirebaseCloudMessagingService: AppFirebaseCloudMessagingService? = null
 	private var appFirebasePerformanceService: AppFirebasePerformanceService? = null
 	private var appFirebaseRealtimeDatabaseService: AppFirebaseRealtimeDatabaseService? = null
+	private var appFirebaseStorageService: AppFirebaseStorageService? = null
 
 	companion object {
 
@@ -159,6 +167,10 @@ class AppFirebaseServices private constructor() {
 			applicationContext,
 			R.bool.gradle_configFirebaseRealtimeDatabaseEnabled
 		) ?: APPFIREBASESERVICES_DEFAULT_IS_FIREBASE_REALTIMEDATABASE_SERVICE_ENABLED
+		isFirebaseStorageServiceEnabled = getResBoolean(
+			applicationContext,
+			R.bool.gradle_configFirebaseRealtimeDatabaseEnabled
+		) ?: APPFIREBASESERVICES_DEFAULT_IS_FIREBASE_STORAGE_SERVICE_ENABLED
 
 		// Initialisation des services activés
 		FirebaseApp.initializeApp(applicationContext)
@@ -223,7 +235,16 @@ class AppFirebaseServices private constructor() {
 				Timber.d("RealtimeDatabase à activer " +
 						"(gradle_configFirebaseRealtimeDatabaseEnabled = true)")
 				appFirebaseRealtimeDatabaseService = AppFirebaseRealtimeDatabaseService()
-				appFirebaseRealtimeDatabaseService?.firebaseRealtimeDatabase?.setPersistenceEnabled(true)
+			} else {
+				Timber.d("Firestore désactivé (gradle_configFirebaseFirestoreEnabled = false)")
+			}
+		}
+
+		CoroutineScope(Dispatchers.Default).launch {
+			if (isFirebaseStorageServiceEnabled) {
+				Timber.d("Storage à activer " +
+						"(gradle_configFirebaseStorageServiceEnabled = true)")
+				appFirebaseStorageService = AppFirebaseStorageService()
 			} else {
 				Timber.d("Firestore désactivé (gradle_configFirebaseFirestoreEnabled = false)")
 			}
@@ -274,6 +295,7 @@ class AppFirebaseServices private constructor() {
 	 * @param contentId argument ITEM_ID de Firebase Analytics
 	 */
 	//----------------------------------------------------------------------------------------------
+	@Suppress("unused")
 	fun trackSelectContent (callingMethod: String, contentType: String, contentId: String) {
 		Timber.v("In")
 		if (appFirebaseAnalyticsService != null) {
@@ -291,6 +313,7 @@ class AppFirebaseServices private constructor() {
 	 * @return Trace (pour stopTrace)
 	 */
 	//----------------------------------------------------------------------------------------------
+	@Suppress("unused")
 	fun startPerformanceTrace(traceName: String): Trace? {
 		Timber.v("In")
 		return if (appFirebasePerformanceService == null) {
@@ -307,6 +330,7 @@ class AppFirebaseServices private constructor() {
 	 * @param trace Trace à arrêter
 	 */
 	//----------------------------------------------------------------------------------------------
+	@Suppress("unused")
 	fun stopPerformanceTrace(trace: Trace) {
 		Timber.v("In")
 		if (appFirebasePerformanceService == null) {
@@ -664,6 +688,23 @@ class AppFirebaseServices private constructor() {
 		init {
 			Timber.v("In")
 			firebaseRealtimeDatabase = FirebaseDatabase.getInstance()
+			Timber.d("Activation de la persistence")
+			firebaseRealtimeDatabase.setPersistenceEnabled(true)
+		}
+	}
+
+	//==============================================================================================
+	/**
+	 * Gestion du service Firebase Realtime Database
+	 */
+	//==============================================================================================
+	inner class AppFirebaseStorageService {
+
+		val firebaseStorage: FirebaseStorage
+
+		init {
+			Timber.v("In")
+			firebaseStorage = Firebase.storage
 		}
 	}
 }

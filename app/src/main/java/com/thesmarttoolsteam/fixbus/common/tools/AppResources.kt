@@ -39,6 +39,7 @@ fun getResString(context: Context?, @StringRes resourceId: Int, vararg params: A
  * @return Ressource de type string
  */
 //--------------------------------------------------------------------------------------------------
+@Suppress("unused")
 fun getResPlurals(context: Context?, @PluralsRes resourceId: Int, quantity: Int, vararg args: Any)
         = context?.resources?.getQuantityString(resourceId, quantity, *args)
 
@@ -75,6 +76,7 @@ fun getResBoolean(context: Context?, @BoolRes resourceId: Int)
  * @return Code couleur
  */
 //--------------------------------------------------------------------------------------------------
+@Suppress("unused")
 fun getResColor(context: Context?, @ColorRes colorId: Int)
     = context?.resources?.getColor(colorId, null)
 

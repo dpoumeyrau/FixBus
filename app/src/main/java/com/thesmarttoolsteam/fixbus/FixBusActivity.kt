@@ -1,21 +1,25 @@
 package com.thesmarttoolsteam.fixbus
 
+import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationBarItemView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import com.thesmarttoolsteam.fixbus.common.FragmentEnum
-import com.thesmarttoolsteam.fixbus.common.tools.getResString
+import com.thesmarttoolsteam.fixbus.common.USER_PERSONALNUMBER_PATTERN
+import com.thesmarttoolsteam.fixbus.common.database.model.ArretTransporteurUi
 import com.thesmarttoolsteam.fixbus.common.services.AppPreferences
+import com.thesmarttoolsteam.fixbus.common.tools.getResString
 import com.thesmarttoolsteam.fixbus.databinding.ActivityFixbusBinding
+import com.thesmarttoolsteam.fixbus.databinding.DialogUserpersonalnumberBinding
 import timber.log.Timber
 
 //==================================================================================================
@@ -37,15 +41,44 @@ class FixBusActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedLis
 
 		(application as? FixBusApp)?.initRequiredServices {
 			Timber.d("Fin de l'initialisation des services obligatoires")
+
 			Timber.d("Lancement des services complémentaires")
 			(application as? FixBusApp)?.initAdditionalServices()
+
+			Timber.d("Vérification de la version du fichier de données IDFM")
+			ArretTransporteurUi.getLastIDFMDataFilename (this) { idfmStoragePath ->
+				Timber.d("*** Dernière version du fichier : $idfmStoragePath")
+				if (idfmStoragePath != null
+					&& (AppPreferences.idfmStoreFilePath.trim() != idfmStoragePath)) {
+					Timber.d("Mise à jour nécessaire !")
+					ArretTransporteurUi.loadIDFMDataFile(idfmStoragePath)
+				} else {
+					Timber.d("Pas de mise à jour à appliquer !")
+				}
+			}
+
 			AppPreferences.launchesCount++
 		}
 
+		if (viewModel.userId == null) {
+			Timber.d("Matricule non renseigné : Affichage de la boite de dialogue")
+			askForUserPersonalNumber()
+		} else {
+			Timber.d("Matricule déjà renseigné")
+			showActivity()
+		}
+	}
+
+	//==============================================================================================
+	/**
+	 * Affichage de l'activité, une fois que le matricule est correctement renseigné
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun showActivity() {
+		Timber.v("In")
+
 		binding = ActivityFixbusBinding.inflate(layoutInflater)
 		setContentView(binding.root)
-
-		viewModel.userId = "DP747541" // Pour supprimer le warning "not used"
 		setActivityListeners()
 		setNavigation()
 	}
@@ -59,6 +92,107 @@ class FixBusActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedLis
 		Timber.v("In")
 
 		setOnFragmentResultListener()
+	}
+
+	//==============================================================================================
+	/**
+	 * Gérer le bouton "Retour arrière
+	 */
+	//----------------------------------------------------------------------------------------------
+	override fun onBackPressed() {
+		Timber.v("In")
+
+		Timber.d("Current Fragment : $currentFragment")
+		when (currentFragment) {
+			FragmentEnum.ScanFragment -> {
+				Timber.d("Demande de confirmation de sortie de l'application")
+				finish()
+			}
+			else -> {
+				super.onBackPressed()
+			}
+		}
+	}
+
+
+
+
+	//==============================================================================================
+	/**
+	 * Récupérer le matricule de l'utilisateur
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun askForUserPersonalNumber() {
+		val personalNumberBinding =  DialogUserpersonalnumberBinding.inflate(layoutInflater)
+
+		val personalNumberDialogBoxBuilder = MaterialAlertDialogBuilder(this)
+			.setTitle(
+				getResString(this,
+					R.string.fixbuxactivity_personalnumber_title)
+			)
+			.setMessage(getResString(
+				this,
+				R.string.fixbuxactivity_personalnumber_message
+			))
+			.setCancelable(false)
+			.setPositiveButton(
+				getResString(this, R.string.fixbuxactivity_personalnumber_action_ok),
+				null
+			)
+			.setNegativeButton(
+				getResString(this, R.string.fixbuxactivity_personalnumber_action_cancel)
+			) { _, _ -> Timber.v("In")
+				this.finish()
+			}
+
+		personalNumberBinding.etPersonalnumber.setText(AppPreferences.userPersonalNumber)
+		personalNumberBinding.etPersonalnumber.requestFocus()
+
+		personalNumberBinding.etPersonalnumber.addTextChangedListener {
+			personalNumberBinding.tilPersonalnumber.error = null
+		}
+
+		personalNumberDialogBoxBuilder.setView(personalNumberBinding.root)
+		val dialog = personalNumberDialogBoxBuilder.show()
+
+		val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+		positiveButton.setOnClickListener {
+			Timber.v("In")
+
+			if (isValidPersonalNumber(personalNumberBinding.etPersonalnumber.text.toString())) {
+				Timber.d("Matricule correct : ${personalNumberBinding.etPersonalnumber.text}")
+				AppPreferences.userPersonalNumber = personalNumberBinding.etPersonalnumber.text.toString()
+				viewModel.userId = personalNumberBinding.etPersonalnumber.text.toString()
+
+				// Fermeture du clavier
+				val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+				inputMethodManager.hideSoftInputFromWindow(personalNumberBinding.root.windowToken, 0)
+
+				// Affichage de l'activité et fermeture de la boite de dialogue
+				showActivity()
+				dialog.dismiss()
+			} else {
+				Timber.d("Matricule incorrect [${personalNumberBinding.etPersonalnumber.text}]")
+				personalNumberBinding.tilPersonalnumber.error = getResString(
+					this,
+					R.string.fixbuxactivity_personalnumber_error
+				)
+			}
+		}
+	}
+
+	//==============================================================================================
+	/**
+	 * Contrôle de la conformité du matricule de l'utilisateur : X999999 ou XX999999
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun isValidPersonalNumber(personalNumber: String?): Boolean {
+		Timber.v("In")
+
+		val regEx = Regex(USER_PERSONALNUMBER_PATTERN)
+		val isValid = regEx.matchEntire(personalNumber as CharSequence) != null
+		Timber.d("Conformité : [$personalNumber] = $isValid")
+		return isValid
 	}
 
 	//==============================================================================================

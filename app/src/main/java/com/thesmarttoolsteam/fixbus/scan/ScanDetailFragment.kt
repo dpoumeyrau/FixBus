@@ -2,6 +2,7 @@ package com.thesmarttoolsteam.fixbus.scan
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -23,16 +24,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.thesmarttoolsteam.fixbus.FixBusActivityViewModel
-import com.thesmarttoolsteam.fixbus.FixBusApp
 import com.thesmarttoolsteam.fixbus.R
 import com.thesmarttoolsteam.fixbus.common.AppFragment
 import com.thesmarttoolsteam.fixbus.common.AppPermissionManager
 import com.thesmarttoolsteam.fixbus.common.database.model.ArretFixBusUi
 import com.thesmarttoolsteam.fixbus.common.tools.getResString
+import com.thesmarttoolsteam.fixbus.common.tools.isLocationAvailable
+import com.thesmarttoolsteam.fixbus.common.tools.isNetworkAvailable
 import com.thesmarttoolsteam.fixbus.databinding.FragmentScandetailBinding
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class ScanDetailFragment : AppFragment() {
@@ -244,6 +244,9 @@ class ScanDetailFragment : AppFragment() {
 				//----------------------------------------------------------------------------------
 				override fun onPermissionGrantedCallback() {
 					Timber.v("In")
+
+					askForLocation()
+					askForConnection()
 					onMapReady()
 					startLocationUpdates()
 				}
@@ -258,7 +261,92 @@ class ScanDetailFragment : AppFragment() {
 			}
 		)
 
+
 		return binding.root
+	}
+
+	//==============================================================================================
+	/**
+	 * Demande d'activation de la localisation dans le cas où elle n'est pas activée
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun askForLocation() {
+		Timber.v("In")
+
+		if (!isLocationAvailable(requireContext())) {
+			Timber.d("Localisation non activée => Demande d'activation")
+			val locationDialogBoxBuilder = MaterialAlertDialogBuilder(requireContext())
+				.setTitle(
+					getResString(requireContext(),
+						R.string.scandetailfragment_location_title)
+				)
+				.setMessage(getResString(
+					requireContext(),
+					R.string.scandetailfragment_location_message
+				))
+				.setCancelable(false)
+				.setPositiveButton(
+					getResString(requireContext(), R.string.scandetailfragment_location_action_ok),
+					null
+				)
+				.setNegativeButton(
+					getResString(requireContext(), R.string.scandetailfragment_location_action_cancel)
+				) { _, _ -> Timber.v("In")
+					requireActivity().finish()
+				}
+			val locationDialogBox = locationDialogBoxBuilder.show()
+
+			val positiveButton = locationDialogBox.getButton(DialogInterface.BUTTON_POSITIVE)
+			positiveButton.setOnClickListener {
+				locationDialogBox.dismiss()
+				if (!isLocationAvailable(requireContext())) {
+					Timber.d("La localisation n'est toujours pas activée :-(")
+					askForLocation()
+				}
+			}
+		}
+	}
+
+	//==============================================================================================
+	/**
+	 * Demande d'activation de la localisation dans le cas où elle n'est pas activée
+	 */
+	//----------------------------------------------------------------------------------------------
+	private fun askForConnection() {
+		Timber.v("In")
+
+		if (!isNetworkAvailable(requireContext())) {
+			Timber.d("Connexion non activée => Demande d'activation")
+			val connectionDialogBoxBuilder = MaterialAlertDialogBuilder(requireContext())
+				.setTitle(
+					getResString(requireContext(),
+						R.string.scandetailfragment_connection_title)
+				)
+				.setMessage(getResString(
+					requireContext(),
+					R.string.scandetailfragment_connection_message
+				))
+				.setCancelable(false)
+				.setPositiveButton(
+					getResString(requireContext(), R.string.scandetailfragment_connection_action_ok),
+					null
+				)
+				.setNegativeButton(
+					getResString(requireContext(), R.string.scandetailfragment_connection_action_cancel)
+				) { _, _ -> Timber.v("In")
+					requireActivity().finish()
+				}
+			val connectionDialogBox = connectionDialogBoxBuilder.show()
+
+			val positiveButton = connectionDialogBox.getButton(DialogInterface.BUTTON_POSITIVE)
+			positiveButton.setOnClickListener {
+				connectionDialogBox.dismiss()
+				if (!isNetworkAvailable(requireContext())) {
+					Timber.d("La connexion internet n'est toujours pas activée :-(")
+					askForConnection()
+				}
+			}
+		}
 	}
 
 	//==============================================================================================
@@ -394,7 +482,9 @@ class ScanDetailFragment : AppFragment() {
 	//----------------------------------------------------------------------------------------------
 	private fun stopLocationUpdates() {
 		Timber.v("In")
-		fusedLocationClient.removeLocationUpdates(locationUpdatesCallback)
+		if (::fusedLocationClient.isInitialized) {
+			fusedLocationClient.removeLocationUpdates(locationUpdatesCallback)
+		}
 	}
 
 	//==============================================================================================

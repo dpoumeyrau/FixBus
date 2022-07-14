@@ -1,7 +1,6 @@
 package com.thesmarttoolsteam.fixbus
 
 import android.app.Application
-import androidx.navigation.NavController
 import com.google.android.material.color.DynamicColors
 import com.thesmarttoolsteam.fixbus.common.services.AppDatabaseService
 import com.thesmarttoolsteam.fixbus.common.services.AppFirebaseServices
